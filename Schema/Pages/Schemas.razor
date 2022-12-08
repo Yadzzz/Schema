@@ -1,0 +1,257 @@
+﻿@page "/schemas"
+
+@attribute [Authorize(Roles ="Administrator,User")]
+
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
+    <div class="widget-content widget-content-area br-8">
+        <table id="zero-config" class="table table-striped dt-table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>M</th>
+                    <th>T</th>
+                    <th>O</th>
+                    <th>T</th>
+                    <th>F</th>
+                    <th>L</th>
+                    <th>S</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Yad</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Yad</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+                <tr>
+                    <td>Amad</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                    <td></td>
+                    <td></td>
+                    <td>21:45<br />04:00</td>
+                    <td>21:45<br />04:00</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th>M</th>
+                    <th>T</th>
+                    <th>O</th>
+                    <th>T</th>
+                    <th>F</th>
+                    <th>L</th>
+                    <th>S</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@code {
+    //private IJSObjectReference module = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //this.module = await JS.InvokeAsync<IJSObjectReference>("import", "./components.js");
+        //await this.module.InvokeAsync<IJSObjectReference>("zeroConfigTable");
+
+        await JS.InvokeVoidAsync("loadZeroConfig");
+        await JS.InvokeVoidAsync("OnScrollEvent");
+    }
+
+    public void Dispose()
+    {
+
+    }
+}

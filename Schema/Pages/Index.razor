@@ -1,0 +1,23 @@
+﻿@page "/"
+
+@attribute [Authorize(Roles = "Administrator,User")]
+@inject IJSRuntime JS
+
+<PageTitle>Hem</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello, @context.User.Identity.Name</h1>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //var authState = await this._authenticationState;
+        await JS.InvokeVoidAsync("OnScrollEvent");
+    }
+}

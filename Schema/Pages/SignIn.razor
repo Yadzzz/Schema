@@ -1,0 +1,95 @@
+﻿@*@page "/login"*@
+
+@using Schema.Authentication
+@inject UserAccountService userAccountService
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+<PageTitle>Logga In</PageTitle>
+
+<link href="../src/assets/css/dark/authentication/auth-boxed.css" rel="stylesheet" type="text/css" />
+<link href="../layouts/horizontal-dark-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
+
+<div class="auth-container d-flex">
+
+    <div class="container mx-auto">
+
+        <div class="row">
+
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-8 col-12 d-flex flex-column align-self-center mx-auto">
+                <div class="card mt-3 mb-3">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+
+                                <h2>Sign In</h2>
+                                <p>Enter your username and password to login</p>
+
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" @bind="this.loginModel.Username">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label class="form-label">Password</label>
+                                    <input type="text" class="form-control" @bind="this.loginModel.Password">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    @*<div class="form-check form-check-primary form-check-inline">
+                                    <input class="form-check-input me-3" type="checkbox" id="form-check-default">
+                                    <label class="form-check-label" for="form-check-default">
+                                    Remember me
+                                    </label>
+                                    </div>*@
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <button class="btn btn-secondary w-100" @onclick="this.Authenticate">Sign In</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+    private Models.LoginModel loginModel = new Models.LoginModel();
+
+    private async Task Authenticate()
+    {
+        var userAccount = userAccountService.GetByUsername(loginModel.Username.ToLower());
+        if (userAccount == null || userAccount.Password != loginModel.Password)
+        {
+            await js.InvokeVoidAsync("alert", "Invalid Username or Password.");
+            this.loginModel.Username = string.Empty;
+            this.loginModel.Password = string.Empty;
+            return;
+        }
+
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+            {
+                Username = userAccount.Username,
+                Role = userAccount.Role
+            });
+
+        //navManager.NavigateTo("/", true);
+    }
+}
