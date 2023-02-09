@@ -1,0 +1,189 @@
+﻿@page "/scheme"
+
+@inject IJSRuntime JS
+@inject Services.PageNavigationService PageNavService
+
+<div class="row layout-top-spacing">
+
+    <div class="table-responsive">
+        <table class="table table-bordered" style="width: 100%; table-layout:fixed;">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th class="text-center" scope="col">M</th>
+                    <th class="text-center" scope="col">T</th>
+                    <th class="text-center" scope="col">O</th>
+                    <th class="text-center" scope="col">T</th>
+                    <th class="text-center" scope="col">F</th>
+                    <th class="text-center" scope="col">L</th>
+                    <th class="text-center" scope="col">S</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Yad Mohamad</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                </tr>
+                <tr>
+                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ahmad Djeza</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                </tr>
+                <tr>
+                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ali Al-Shafey</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+
+
+    <div class="table-responsive">
+        <table class="table table-bordered" style="font-size:8px;">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th class="text-center" scope="col">M</th>
+                    <th class="text-center" scope="col">T</th>
+                    <th class="text-center" scope="col">O</th>
+                    <th class="text-center" scope="col">T</th>
+                    <th class="text-center" scope="col">F</th>
+                    <th class="text-center" scope="col">L</th>
+                    <th class="text-center" scope="col">S</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Yad Mohamad</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                </tr>
+                <tr>
+                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ahmad Djeza</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                </tr>
+                <tr>
+                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ali Al-Shafey</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                    <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br />
+
+    <div id="tableSimple" class="col-lg-12 col-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h4>Schema</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-content widget-content-area">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered" style="font-size:8px;">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th class="text-center" scope="col">M</th>
+                                <th class="text-center" scope="col">T</th>
+                                <th class="text-center" scope="col">O</th>
+                                <th class="text-center" scope="col">T</th>
+                                <th class="text-center" scope="col">F</th>
+                                <th class="text-center" scope="col">L</th>
+                                <th class="text-center" scope="col">S</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Yad Mohamad</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            </tr>
+                            <tr>
+                                <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ahmad Djeza</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            </tr>
+                            <tr>
+                                <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ali Al-Shafey</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                                <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.PageNavService.UpdateActivePage("Scheme");
+
+            //var authState = await this._authenticationState;
+
+            await JS.InvokeVoidAsync("OnScrollEvent");
+            this.StateHasChanged();
+        }
+    }
+}

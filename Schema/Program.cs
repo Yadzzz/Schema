@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Schema.Authentication;
+using Schema.Services;
 
 namespace Schema
 {
@@ -18,6 +19,7 @@ namespace Schema
             builder.Services.AddScoped<ProtectedSessionStorage>();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             builder.Services.AddSingleton<UserAccountService>();
+            builder.Services.AddScoped<PageNavigationService>();
 
             var app = builder.Build();
 

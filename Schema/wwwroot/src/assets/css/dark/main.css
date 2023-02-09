@@ -14,14 +14,17 @@ html {
 }
 
 body.dark {
-  color: #888ea8;
-  height: 100%;
-  font-size: 0.875rem;
-  background: #f1f2f3;
-  overflow-x: hidden;
-  overflow-y: auto;
-  letter-spacing: 0.0312rem;
-  font-family: "Nunito", sans-serif;
+    color: #888ea8;
+    height: 100%;
+    font-size: 0.875rem;
+    background: #f1f2f3;
+    /*overflow-x: hidden;
+    overflow-y: auto;*/
+    letter-spacing: 0.0312rem;
+    font-family: "Nunito", sans-serif;
+
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
   color: #e0e6ed;

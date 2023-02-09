@@ -19,6 +19,8 @@
             //Get all users
             //Foreach all users with all dates of the week
             //Create a row
+
+            return null;
         }
     }
 }
