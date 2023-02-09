@@ -10,7 +10,9 @@
 	===============================
 */
 html {
-  min-height: 100%;
+    min-height: 100%;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 body.dark {
