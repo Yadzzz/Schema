@@ -24,6 +24,7 @@ namespace Schema
             builder.Services.AddScoped<PageNavigationService>();
             builder.Services.AddTransient<CalendarService>();
             builder.Services.AddTransient<BevakningContext>();
+            builder.Services.AddTransient<UsersService>();
 
             var app = builder.Build();
 

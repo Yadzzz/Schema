@@ -90,7 +90,10 @@
         //        Role = userAccount.Role
         //    });
 
-        if (userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))
+        var user = await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password);
+        //if (await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))
+        
+        if(user != null)
         {
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession

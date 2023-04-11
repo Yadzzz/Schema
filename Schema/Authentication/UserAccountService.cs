@@ -4,13 +4,10 @@ namespace Schema.Authentication
 {
     public class UserAccountService
     {
-        private BevakningContext _bevakningContext;
         private List<UserAccount> _users;
 
-        public UserAccountService(BevakningContext bevakningContext)
+        public UserAccountService()
         {
-            this._bevakningContext = bevakningContext;
-
             this._users = new List<UserAccount>
             {
                 new UserAccount { Username = "yad", Password = "123", Role = "Administrator" },
@@ -18,27 +15,27 @@ namespace Schema.Authentication
             };
         }
 
-        public bool AuthenticateUser(string username, string password, out UserAccount userAccount)
+        public async Task<UserAccount?> AuthenticateUser(string username, string password)
         {
-            userAccount = null;
+            BevakningContext bevakningContext = new BevakningContext();
 
-            if (this._bevakningContext == null || this._bevakningContext.Users == null)
-                return false;
+            if (bevakningContext == null || bevakningContext.Users == null)
+                return null;
 
-            var user = this._bevakningContext.Users.Where(x => x.Username.ToLower() == username.ToLower() && x.Password == password).FirstOrDefault();
+            var user = bevakningContext.Users.Where(x => x.Username.ToLower() == username.ToLower() && x.Password == password).FirstOrDefault();
 
             if(user == null)
             {
-                return false;
+                return null;
             }
 
-            userAccount = new()
+            UserAccount userAccount = new()
             {
                 Username = user.Username,
                 Role = user.Role
             };
 
-            return true;
+            return userAccount;
         }
 
         public UserAccount? GetByUsername(string username)

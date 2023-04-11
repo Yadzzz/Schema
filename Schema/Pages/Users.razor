@@ -1,0 +1,158 @@
+﻿@page "/users"
+
+@inject IJSRuntime JS
+@inject Services.PageNavigationService PageNavService
+@inject Services.UsersService UsersService
+
+<div class="row layout-top-spacing">
+
+    <div class="row layout-top-spacing" />
+
+    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h4>Användare</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-content widget-content-area">
+
+                <div class="form-group mb-4">
+                    <label for="exampleFormControlSelect1">Användare</label>
+                    <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
+                        <option value="0">Välj Användare</option>
+                        @if (this._users != null && this._users.Count > 0)
+                        {
+                            foreach (var user in this._users)
+                            {
+                                <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row layout-top-spacing" />
+
+    @if (this._selectedUser != null)
+    {
+        <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <center><h4>@this._selectedUser.Username</h4></center>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="usernameInput">Användarnamn</label>
+                            <input id="usernameInput" type="text" class="form-control" aria-label="Användarnamn" @bind-value="this._selectedUser.Username" @bind-value:event="oninput">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="passwordInput">Lösenord</label>
+                            <input id="passwordInput" type="text" class="form-control" aria-label="Lösenord" @bind-value="this._selectedUser.Password" @bind-value:event="oninput">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="firstNameInput">Namn</label>
+                            <input id="firstNameInput" type="text" class="form-control" placeholder="Namn" aria-label="Namn" @bind-value="this._selectedUser.FirstName" @bind-value:event="oninput">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="lastNameInput">Efternamn</label>
+                            <input id="lastNameInput" type="text" class="form-control" placeholder="Efternamn" aria-label="Efternamn" @bind-value="this._selectedUser.LastName" @bind-value:event="oninput">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="roleControlSelect">Behörigheter</label>
+                            <select class="form-select" id="roleControlSelect" @onchange=@OnChangeUserRole>
+                                @if (this._selectedUser?.Role.ToLower() == "administrator")
+                                {
+                                    <option value="1" selected>Administrator</option>
+                                    <option value="2">User</option>
+                                }
+                                else
+                                {
+                                    <option value="1">Administrator</option>
+                                    <option value="2" selected>User</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <br /><br />
+
+                    <div class="col-sm-12">
+                        <div class="d-grid gap-2 col-8 mx-auto">
+                            <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+@code {
+    private List<DataAccessLibrary.Models.User>? _users;
+    private DataAccessLibrary.Models.User? _selectedUser;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.PageNavService.UpdateActivePage("Users");
+
+            //var authState = await this._authenticationState;
+
+            this._users = await this.UsersService.GetUsers();
+            await JS.InvokeVoidAsync("OnScrollEvent");
+            this.StateHasChanged();
+        }
+    }
+
+    public async Task Save()
+    {
+        await this.UsersService.UpdateUser(this._selectedUser!);
+    }
+
+    private void OnSelectUser(int id)
+    {
+        var user = this._users.Where(x => x.Id == id).FirstOrDefault();
+        if (user == null)
+        {
+            this._selectedUser = null;
+        }
+
+        this._selectedUser = user;
+        this.StateHasChanged();
+    }
+
+    private void OnChangeUser(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        if (int.TryParse(inputValue, out int id))
+        {
+            this.OnSelectUser(id);
+        }
+    }
+
+    private void OnChangeUserRole(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        if (inputValue == "1")
+        {
+
+        }
+        else if (inputValue == "2")
+        {
+
+        }
+    }
+}
