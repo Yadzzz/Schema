@@ -47,7 +47,10 @@
     <link rel="icon" type="image/png" href="favicon.png"/>
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />*@
 </head>
-<body class="layout-boxed" page="starter-pack" style="overflow: scroll; -webkit-overflow-scrolling: touch;">
+<body class="layout-boxed" page="starter-pack" style="overflow: scroll; -webkit-overflow-scrolling: touch; 
+        width:100%;
+        overflow-x:hidden;
+        overflow-y:hidden;">
     @*<component type="typeof(App)" render-mode="ServerPrerendered" />*@
 
     <!-- BEGIN LOADER -->
@@ -84,13 +87,14 @@
     <script src="../../src/assets/js/custom.js"></script>
     <script src="../components.js"></script>
 
-    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+   @* <!-- BEGIN PAGE LEVEL SCRIPTS -->
     <script src="../src/plugins/src/fullcalendar/fullcalendar.min.js"></script>
     <script src="../src/plugins/src/uuid/uuid4.min.js"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <script src="../src/plugins/src/fullcalendar/custom-fullcalendar.js"></script>
     <!--  END CUSTOM SCRIPTS FILE  -->
+    *@
 
 </body>
 </html>

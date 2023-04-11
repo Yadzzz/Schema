@@ -11,7 +11,7 @@
         {
             this.WeekStartDate= weekStarDate;
             this.WeekEndDate= weekEndDate;
-            this.Rows = new List<CalendarRow>();
+            this.Rows = rows;
         }
     }
 }
