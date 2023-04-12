@@ -3,6 +3,7 @@
 @inject IJSRuntime JS
 @inject Services.PageNavigationService PageNavService
 @inject Services.UsersService UsersService
+@inject Services.BookingsService BookingsService
 
 <AuthorizeView Roles="Administrator" Context="usersPageContext">
     <Authorized>
@@ -37,7 +38,7 @@
 
                         <div class="col-sm-12">
                             <div class="d-grid gap-2 col-12 mx-auto">
-                                <button class="btn btn-dark mb-4">Lägg till Bokning</button>
+                                <button class="btn btn-dark mb-4" @onclick="this.AddNewBooking">Lägg till Bokning</button>
                                 <button class="btn btn-dark mb-4">Visa Senaste Bokningar</button>
                             </div>
                         </div>
@@ -120,6 +121,8 @@
     private List<DataAccessLibrary.Models.User>? _users;
     private int _selectedUserId = 0;
     private DataAccessLibrary.Models.Schedule? _selectedSchedule;
+    private List<DataAccessLibrary.Models.Schedule>? _bookings;
+    private bool _showLatestBookings = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -128,6 +131,7 @@
             this.PageNavService.UpdateActivePage("Bookings");
 
             this._users = await this.UsersService.GetUsers();
+            this._bookings = await this.BookingsService.GetBookings();
             await JS.InvokeVoidAsync("OnScrollEvent");
             this.StateHasChanged();
         }
@@ -166,5 +170,22 @@
     {
         string inputValue = e?.Value?.ToString();
         this._selectedSchedule.JobType = inputValue;
+    } 
+
+    private void AddNewBooking()
+    {
+        this._selectedSchedule = new()
+        {
+            Id = 0
+        };
+
+        this.StateHasChanged();
+    }
+
+    private async Task GetBookings()
+    {
+        this._bookings = await this.BookingsService.GetBookings();
+        this._showLatestBookings = true;
+        this.StateHasChanged();
     }
 }
