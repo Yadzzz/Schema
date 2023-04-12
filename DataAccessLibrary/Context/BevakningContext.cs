@@ -32,8 +32,9 @@ public partial class BevakningContext : DbContext
 
             entity.Property(e => e.DateEnd).HasColumnType("datetime");
             entity.Property(e => e.DateStart).HasColumnType("datetime");
-            //entity.Property(e => e.TimeEnd).HasColumnType("datetime");
-            //entity.Property(e => e.TimeStart).HasColumnType("datetime");
+            entity.Property(e => e.TimeStart).HasMaxLength(100);
+            entity.Property(e => e.TimeEnd).HasMaxLength(100);
+            entity.Property(e => e.JobType).HasMaxLength(100);
             entity.Property(e => e.UserId)
                 .HasMaxLength(10)
                 .IsFixedLength();
@@ -46,6 +47,7 @@ public partial class BevakningContext : DbContext
             entity.Property(e => e.Role).HasMaxLength(100);
             entity.Property(e => e.FirstName).HasMaxLength(100);
             entity.Property(e => e.LastName).HasMaxLength(100);
+            entity.Property(e => e.Active).HasColumnType("bit");
         });
 
         OnModelCreatingPartial(modelBuilder);

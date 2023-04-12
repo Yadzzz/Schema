@@ -46,7 +46,7 @@
 
                 foreach(var date in dates)
                 {
-                    var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date).FirstOrDefault();
+                    var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).FirstOrDefault();
 
                     switch(date.DayOfWeek)
                     {

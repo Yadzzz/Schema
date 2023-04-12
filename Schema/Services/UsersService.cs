@@ -27,18 +27,37 @@ namespace Schema.Services
             }
         }
 
-        public async Task UpdateUser(DataAccessLibrary.Models.User user)
+        public async Task<bool> UpdateUser(DataAccessLibrary.Models.User user)
         {
-            if (user == null || this._bevakningContext == null) return;
+            if (user == null || this._bevakningContext == null) return false;
 
             try
             {
                 this._bevakningContext.Users.Update(user);
                 await this._bevakningContext.SaveChangesAsync();
+                return true;
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        public async Task<bool> AddUser(DataAccessLibrary.Models.User user)
+        {
+            if (user == null || this._bevakningContext == null) return false;
+
+            try
+            {
+                await this._bevakningContext.Users.AddAsync(user);
+                await this._bevakningContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
             }
         }
     }

@@ -7,22 +7,53 @@
 <div class="row layout-top-spacing">
 
     @*<div class="table-responsive">
-        <div class="col-xl-12" style="float:left">
-            <div class="col-sm-12">
-                <div class="custom-control custom-checkbox checkbox-info">
-                    <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
-                    <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
-                </div>
-            </div>
-        </div>
+    <div class="col-xl-12" style="float:left">
+    <div class="col-sm-12">
+    <div class="custom-control custom-checkbox checkbox-info">
+    <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
+    <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
+    </div>
+    </div>
+    </div>
     </div>*@
 
     <div class="row layout-top-spacing" />
+
+    <div class="d-grid gap-2 col-1 mx-auto">
+        <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.PreviousWeekButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </button>
+    </div>
+
+    <div class="d-grid gap-2 col-1 mx-auto">
+        <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.NextWeekButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+    </div>
+
+    <br />
+    <p></p>
+    <hr />
 
     @if (this.classicScheme)
     {
         <table class="table table" style="max-width:100%; table-layout:fixed; border-collapse: collapse; ">
             <thead>
+                @if(this._calendar != null)
+                {
+                    <tr>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
+                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
+                    </tr>
+                }
+                else
+                {
                 <tr>
                     <th scope="col"></th>
                     <th scope="col">M</th>
@@ -33,38 +64,19 @@
                     <th scope="col">L</th>
                     <th scope="col">S</th>
                 </tr>
+                }
             </thead>
             <tbody>
                 @*<tr>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                </tr>
-                <tr>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Ahmad Djeza</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                </tr>
-                <tr>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Ali Al-Shafey</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                </tr>*@
+            <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            </tr>*@
                 @if (this._calendar != null && this._calendar.Rows.Count > 0)
                 {
                     foreach (var row in this._calendar.Rows ?? Enumerable.Empty<Calendar.CalendarRow>())
@@ -136,6 +148,8 @@
         </div>
     }
 
+    <hr />
+
 </div>
 
 @code {
@@ -165,6 +179,45 @@
         else
         {
             this.classicScheme = true;
+        }
+
+        this.StateHasChanged();
+    }
+
+    private string GetMonth(DateTime date)
+    {
+        string month = date.ToString("MMMM");
+
+        return char.ToUpper(month[0]) + month.Substring(1);
+    }
+
+    private void NextWeekButton()
+    {
+        if (this._calendar != null)
+        {
+            DateTime currentCalendarDate = this._calendar.WeekStartDate;
+            this._calendar = this.CalendarService.InitializeCalendarData(currentCalendarDate.AddDays(+7));
+        }
+        else
+        {
+            DateTime currentCalendarDate = DateTime.Now;
+            this._calendar = this.CalendarService.InitializeCalendarData(currentCalendarDate.AddDays(+7));
+        }
+
+        this.StateHasChanged();
+    }
+
+    private void PreviousWeekButton()
+    {
+        if (this._calendar != null)
+        {
+            DateTime currentCalendarDate = this._calendar.WeekStartDate;
+            this._calendar = this.CalendarService.InitializeCalendarData(currentCalendarDate.AddDays(-7));
+        }
+        else
+        {
+            DateTime currentCalendarDate = DateTime.Now;
+            this._calendar = this.CalendarService.InitializeCalendarData(currentCalendarDate.AddDays(-7));
         }
 
         this.StateHasChanged();

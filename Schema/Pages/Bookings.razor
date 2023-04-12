@@ -1,0 +1,170 @@
+﻿@page "/bookings"
+
+@inject IJSRuntime JS
+@inject Services.PageNavigationService PageNavService
+@inject Services.UsersService UsersService
+
+<AuthorizeView Roles="Administrator" Context="usersPageContext">
+    <Authorized>
+        <div class="row layout-top-spacing">
+
+            <div class="row layout-top-spacing" />
+
+            <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-header">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                <h4>Bokningar</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content widget-content-area">
+
+                        @*<div class="form-group mb-4">
+                            <label for="exampleFormControlSelect1">Användare</label>
+                            <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
+                                <option value="0">Välj Användare</option>
+                                @if (this._users != null && this._users.Count > 0)
+                                {
+                                    foreach (var user in this._users)
+                                    {
+                                        <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                    }
+                                }
+                            </select>
+                        </div>*@
+
+                        <div class="col-sm-12">
+                            <div class="d-grid gap-2 col-12 mx-auto">
+                                <button class="btn btn-dark mb-4">Lägg till Bokning</button>
+                                <button class="btn btn-dark mb-4">Visa Senaste Bokningar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row layout-top-spacing" />
+
+            @if (this._selectedSchedule != null)
+            {
+                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <center><h4>Ny Bokning</h4></center>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-content widget-content-area">
+                            <div class="row g-3">
+                                <div class="form-group mb-4">
+                                    <label for="exampleFormControlSelect1">Användare</label>
+                                    <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
+                                        <option value="0">Välj Användare</option>
+                                        @if (this._users != null && this._users.Count > 0)
+                                        {
+                                            foreach (var user in this._users)
+                                            {
+                                                <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="usernameInput">Datum</label>
+                                    <InputDate @bind-Value="this._selectedSchedule.DateStart" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="usernameInput">Starttid</label>
+                                    <input id="usernameInput" type="text" class="form-control" placeholder="e.g 22:00" @bind-value="this._selectedSchedule.TimeStart" @bind-value:event="oninput">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="usernameInput">Sluttid</label>
+                                    <input id="usernameInput" type="text" class="form-control" placeholder="e.g 03:45" @bind-value="this._selectedSchedule.TimeEnd" @bind-value:event="oninput">
+                                </div>
+                                <div class="form-group mb-4">
+                                    <label for="exampleFormControlSelect1">Användare</label>
+                                    <select class="form-select" id="exampleFormControlSelect1" @onchange="this.OnChangeJobType">
+                                        <option value="0">Jobbtyp</option>
+                                        <option value="Entrevärd">Entrevärd</option>
+                                        <option value="Ordningsvakt">Ordningsvakt</option>
+                                        <option value="Vaktchef">Vaktchef</option>
+                                        <option value="Annat">Annat</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <br /><br />
+
+                            <div class="col-sm-12">
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You cannot view this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<DataAccessLibrary.Models.User>? _users;
+    private int _selectedUserId = 0;
+    private DataAccessLibrary.Models.Schedule? _selectedSchedule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.PageNavService.UpdateActivePage("Bookings");
+
+            this._users = await this.UsersService.GetUsers();
+            await JS.InvokeVoidAsync("OnScrollEvent");
+            this.StateHasChanged();
+        }
+    }
+
+    public async Task Save()
+    {
+        if (this._selectedSchedule == null) return;
+
+        if(this._selectedSchedule.Id == 0)
+        {
+            //Add
+        }
+        else
+        {
+            //Save
+        }
+    }
+
+    private void OnSelectUser(int id)
+    {
+        this._selectedUserId = id;
+        this.StateHasChanged();
+    }
+
+    private void OnChangeUser(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        if (int.TryParse(inputValue, out int id))
+        {
+            this.OnSelectUser(id);
+        }
+    }
+
+    private void OnChangeJobType(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        this._selectedSchedule.JobType = inputValue;
+    }
+}

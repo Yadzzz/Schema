@@ -31,13 +31,13 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" @bind="this.loginModel.Username">
+                                    <input type="text" class="form-control" @bind="this.loginModel.Username" @onkeydown="this.Enter">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="mb-4">
                                     <label class="form-label">Password</label>
-                                    <input type="password" class="form-control" @bind="this.loginModel.Password">
+                                    <input type="password" class="form-control" @bind="this.loginModel.Password" @onkeydown="this.Enter">
                                 </div>
                             </div>
                             <div class="col-12">
@@ -92,7 +92,7 @@
 
         var user = await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password);
         //if (await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))
-        
+
         if(user != null)
         {
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
@@ -111,5 +111,13 @@
         }
 
         //navManager.NavigateTo("/", true);
+    }
+
+    public async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await this.Authenticate();
+        }
     }
 }
