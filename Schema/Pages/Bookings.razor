@@ -40,7 +40,7 @@
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button class="btn btn-dark mb-4" @onclick="this.AddNewBooking">Lägg till Bokning</button>
                                 <button class="btn btn-dark mb-4" @onclick="this.GetBookings">Visa Senaste Bokningar</button>
-                                @if (this._showLatestBookings && this._bookings != null && this._bookings.Count > 0)
+                                @if ((this._showLatestBookings && this._bookings != null && this._bookings.Count > 0) || this._selectedSchedule != null)
                                 {
                                     <button class="btn btn-dark mb-4" @onclick="this.Reset">Återställ</button>
                                 }
@@ -75,7 +75,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var booking in this._bookings)
+                                        @foreach (var booking in this._bookings.OrderByDescending(x => x.DateStart))
                                         {
                                             <tr>
                                                 <td>@(this.GetUser(booking.UserId)?.FirstName + " " + this.GetUser(booking.UserId)?.LastName)</td>
@@ -83,7 +83,19 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                                                     <span class="table-inner-text">@(booking.DateStart?.Date.Day + "/" + booking.DateStart?.Month + " " + booking.TimeStart + "-" + booking.TimeEnd)</span>
                                                 </td>
-                                                <td class="text-center">DELETE</td>
+                                                <td class="text-center">
+                                                    <div class="action-btns">
+                                                        @*<a href="javascript:void(0);" class="action-btn btn-view bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="View">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                </a>*@
+                                                        <a href="javascript:void(0);" @onclick=@(() => this.Select(booking)) class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                                        </a>
+                                                        <a href="javascript:void(0);" @onclick=@(() => this.Delete(booking)) class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                        </a>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
@@ -116,7 +128,14 @@
                                         {
                                             foreach (var user in this._users)
                                             {
-                                                <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                                if (this._selectedSchedule.UserId == user.Id)
+                                                {
+                                                    <option value="@user.Id"selected>@(user.FirstName + " " + user.LastName)</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                                }
                                             }
                                         }
                                     </select>
@@ -137,10 +156,28 @@
                                     <label for="exampleFormControlSelect1">Användare</label>
                                     <select class="form-select" id="exampleFormControlSelect1" @onchange="this.OnChangeJobType">
                                         <option value="0">Jobbtyp</option>
-                                        <option value="Entrevärd">Entrevärd</option>
-                                        <option value="Ordningsvakt">Ordningsvakt</option>
-                                        <option value="Vaktchef">Vaktchef</option>
-                                        <option value="Annat">Annat</option>
+                                        @if (this.jobTypes != null && this.jobTypes.Count > 0)
+                                        {
+                                            foreach (var job in this.jobTypes)
+                                            {
+                                                if (this._selectedSchedule?.JobType?.ToLower() == job.ToLower())
+                                                {
+                                                    <option value="@job" selected>@job</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@job">@job</option>
+                                                }
+                                            }
+                                        }
+                                        @*else
+                                        {
+                                            <option value="0">Jobbtyp</option>
+                                            <option value="Entrevärd">Entrevärd</option>
+                                            <option value="Ordningsvakt">Ordningsvakt</option>
+                                            <option value="Vaktchef">Vaktchef</option>
+                                            <option value="Annat">Annat</option>
+                                        }*@
                                     </select>
                                 </div>
                             </div>
@@ -166,10 +203,11 @@
 
 @code {
     private List<DataAccessLibrary.Models.User>? _users;
-    private int _selectedUserId = 0;
     private DataAccessLibrary.Models.Schedule? _selectedSchedule;
     private List<DataAccessLibrary.Models.Schedule>? _bookings;
     private bool _showLatestBookings = false;
+
+    private List<string> jobTypes;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -179,6 +217,14 @@
 
             this._users = await this.UsersService.GetUsers();
             this._bookings = await this.BookingsService.GetBookings();
+            this.jobTypes = new()
+            {
+                "Entrevärd",
+                "Ordningsvakt",
+                "Vaktchef",
+                "Annat"
+            };
+
             await JS.InvokeVoidAsync("OnScrollEvent");
             this.StateHasChanged();
         }
@@ -188,19 +234,71 @@
     {
         if (this._selectedSchedule == null) return;
 
+        if (this._selectedSchedule.DateStart == null || string.IsNullOrEmpty(this._selectedSchedule.TimeStart) || string.IsNullOrEmpty(this._selectedSchedule.TimeEnd) ||
+            string.IsNullOrEmpty(this._selectedSchedule.JobType) || this._selectedSchedule.UserId == 0)
+        {
+            Console.WriteLine("NULL");
+            return;
+        }
+
         if (this._selectedSchedule.Id == 0)
         {
             //Add
+            bool success = await this.BookingsService.AddBooking(this._selectedSchedule);
+
+            if (success)
+            {
+                await this.FlushBookings();
+            }
+            else
+            {
+
+            }
         }
         else
         {
             //Save
+            bool success = await this.BookingsService.UpdateBooking(this._selectedSchedule);
+
+            if (success)
+            {
+                await this.FlushBookings();
+            }
+            else
+            {
+
+            }
         }
+
+        this._selectedSchedule = null;
+        await this.GetBookings();
+        this.StateHasChanged();
+    }
+
+    private async Task Delete(DataAccessLibrary.Models.Schedule schedule)
+    {
+        bool success = await this.BookingsService.DeleteBooking(schedule);
+
+        if (success)
+        {
+            await this.FlushBookings();
+        }
+        else
+        {
+
+        }
+    }
+
+    private void Select(DataAccessLibrary.Models.Schedule schedule)
+    {
+        this._selectedSchedule = schedule;
+        this._showLatestBookings = false;
+        this.StateHasChanged();
     }
 
     private void OnSelectUser(int id)
     {
-        this._selectedUserId = id;
+        this._selectedSchedule.UserId = id;
         this.StateHasChanged();
     }
 
@@ -226,6 +324,7 @@
                 Id = 0
             };
 
+        this._showLatestBookings = false;
         this.StateHasChanged();
     }
 
@@ -234,12 +333,14 @@
         if (this._bookings == null || this._bookings.Count == 0)
             this._bookings = await this.BookingsService.GetBookings();
 
+        this._selectedSchedule = null;
         this._showLatestBookings = true;
         this.StateHasChanged();
     }
 
-    private async Task Reset()
+    private void Reset()
     {
+        this._selectedSchedule = null;
         this._showLatestBookings = false;
         this.StateHasChanged();
     }

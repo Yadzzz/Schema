@@ -60,5 +60,22 @@ namespace Schema.Services
                 return false;
             }
         }
+
+        public async Task<bool> RemoveUser(DataAccessLibrary.Models.User user)
+        {
+            if (user == null || this._bevakningContext == null || this._bevakningContext.Users == null) return false;
+
+            try
+            {
+                this._bevakningContext.Users.Remove(user);
+                await this._bevakningContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
     }
 }
