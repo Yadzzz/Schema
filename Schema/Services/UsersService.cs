@@ -27,6 +27,22 @@ namespace Schema.Services
             }
         }
 
+        public async Task<DataAccessLibrary.Models.User?> GetUser(string username)
+        {
+            if (this._bevakningContext == null || this._bevakningContext.Users == null)
+                return null;
+
+            try
+            {
+                return await this._bevakningContext.Users.Where(x => x.Username.ToLower() == username.ToLower()).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
         public async Task<bool> UpdateUser(DataAccessLibrary.Models.User user)
         {
             if (user == null || this._bevakningContext == null) return false;
@@ -37,7 +53,7 @@ namespace Schema.Services
                 await this._bevakningContext.SaveChangesAsync();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return false;

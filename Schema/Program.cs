@@ -26,6 +26,7 @@ namespace Schema
             builder.Services.AddTransient<BevakningContext>();
             builder.Services.AddTransient<UsersService>();
             builder.Services.AddTransient<BookingsService>();
+            builder.Services.AddTransient<SessionService>();
 
             var app = builder.Build();
 

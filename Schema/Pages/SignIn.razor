@@ -5,6 +5,7 @@
 @inject IJSRuntime js
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
+@inject Services.SessionService SessionService
 
 <PageTitle>Logga In</PageTitle>
 
@@ -72,6 +73,17 @@
 @code {
     private Models.LoginModel loginModel = new Models.LoginModel();
 
+    protected override async Task OnInitializedAsync()
+    {
+        this.loginModel.Username = await this.SessionService.GetUsername();
+        this.loginModel.Password = await this.SessionService.GetPassword();
+
+        if(!string.IsNullOrEmpty(this.loginModel.Username) || !string.IsNullOrEmpty(this.loginModel.Password))
+        {
+            await this.Authenticate();
+        }
+    }
+
     private async Task Authenticate()
     {
         //var userAccount = userAccountService.GetByUsername(loginModel.Username.ToLower());
@@ -93,7 +105,7 @@
         var user = await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password);
         //if (await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))
 
-        if(user != null)
+        if (user != null)
         {
             var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
             await customAuthStateProvider.UpdateAuthenticationState(new UserSession
@@ -101,6 +113,8 @@
                     Username = user.Username,
                     Role = user.Role
                 });
+
+            await this.SessionService.AddUser(user.Username, user.Password);
         }
         else
         {

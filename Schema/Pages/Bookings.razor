@@ -130,7 +130,7 @@
                                             {
                                                 if (this._selectedSchedule.UserId == user.Id)
                                                 {
-                                                    <option value="@user.Id"selected>@(user.FirstName + " " + user.LastName)</option>
+                                                    <option value="@user.Id" selected>@(user.FirstName + " " + user.LastName)</option>
                                                 }
                                                 else
                                                 {
@@ -140,9 +140,13 @@
                                         }
                                     </select>
                                 </div>
-                                <div class="col-sm-12">
-                                    <label for="usernameInput">Datum</label>
+                                <div class="col-sm-6">
+                                    <label for="usernameInput">Startdatum</label>
                                     <InputDate @bind-Value="this._selectedSchedule.DateStart" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="usernameInput">Slutdatum</label>
+                                    <InputDate @bind-Value="this._selectedSchedule.DateEnd" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="usernameInput">Starttid</label>
@@ -171,13 +175,13 @@
                                             }
                                         }
                                         @*else
-                                        {
-                                            <option value="0">Jobbtyp</option>
-                                            <option value="Entrevärd">Entrevärd</option>
-                                            <option value="Ordningsvakt">Ordningsvakt</option>
-                                            <option value="Vaktchef">Vaktchef</option>
-                                            <option value="Annat">Annat</option>
-                                        }*@
+                                    {
+                                    <option value="0">Jobbtyp</option>
+                                    <option value="Entrevärd">Entrevärd</option>
+                                    <option value="Ordningsvakt">Ordningsvakt</option>
+                                    <option value="Vaktchef">Vaktchef</option>
+                                    <option value="Annat">Annat</option>
+                                    }*@
                                     </select>
                                 </div>
                             </div>
@@ -235,11 +239,38 @@
         if (this._selectedSchedule == null) return;
 
         if (this._selectedSchedule.DateStart == null || string.IsNullOrEmpty(this._selectedSchedule.TimeStart) || string.IsNullOrEmpty(this._selectedSchedule.TimeEnd) ||
-            string.IsNullOrEmpty(this._selectedSchedule.JobType) || this._selectedSchedule.UserId == 0)
+            string.IsNullOrEmpty(this._selectedSchedule.JobType) || this._selectedSchedule.UserId == 0 || this._selectedSchedule.DateEnd == null)
         {
             Console.WriteLine("NULL");
             return;
         }
+
+        if (this._selectedSchedule.TimeStart.Length != 5 || this._selectedSchedule.TimeEnd.Length != 5 || !this._selectedSchedule.TimeStart.Contains(":")
+            || !this._selectedSchedule.TimeEnd.Contains(":"))
+        {
+
+
+            return;
+        }
+
+        string[] startTime = this._selectedSchedule.TimeStart.Split(":");
+        string[] endTime = this._selectedSchedule.TimeEnd.Split(":");
+        if (!int.TryParse(startTime[0], out int start1) || !int.TryParse(startTime[1], out int start2) ||
+            !int.TryParse(endTime[0], out int end1) || !int.TryParse(endTime[1], out int end2))
+        {
+            return;
+        }
+
+        var startTimeSpan = DateTime.ParseExact(this._selectedSchedule.TimeStart, "HH:mm", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+        var endTimeSpan = DateTime.ParseExact(this._selectedSchedule.TimeEnd, "HH:mm", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+
+        DateTime dt1 = new DateTime(this._selectedSchedule.DateStart.Value.Year, this._selectedSchedule.DateStart.Value.Month,
+                                    this._selectedSchedule.DateStart.Value.Day, startTimeSpan.Hours, startTimeSpan.Minutes, startTimeSpan.Seconds);
+        DateTime dt2 = new DateTime(this._selectedSchedule.DateEnd.Value.Year, this._selectedSchedule.DateEnd.Value.Month,
+                                            this._selectedSchedule.DateEnd.Value.Day, endTimeSpan.Hours, endTimeSpan.Minutes, endTimeSpan.Seconds);
+
+        this._selectedSchedule.DateStart = dt1;
+        this._selectedSchedule.DateEnd = dt2;
 
         if (this._selectedSchedule.Id == 0)
         {

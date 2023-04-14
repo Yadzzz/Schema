@@ -1,0 +1,37 @@
+﻿@page "/mypages"
+
+@inject IJSRuntime JS
+@inject Services.PageNavigationService PageNavService
+@inject Services.UsersService UsersService
+@inject Services.BookingsService BookingsService
+
+<div class="row layout-top-spacing">
+
+    <div class="row layout-top-spacing" />
+
+    
+</div>
+
+@code {
+    private DataAccessLibrary.Models.User? _user;
+    private List<DataAccessLibrary.Models.Schedule>? _bookings;
+    private bool _showLatestBookings = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._user = await this.UsersService.GetUser("");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.PageNavService.UpdateActivePage("MyPages");
+
+            await JS.InvokeVoidAsync("OnScrollEvent");
+            this.StateHasChanged();
+        }
+    }
+
+
+}
