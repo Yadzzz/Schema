@@ -65,7 +65,7 @@ namespace Schema.Services
 
         public async Task AddUser(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || this.storage == null)
+            if (this.storage == null)
             {
                 return;
             }

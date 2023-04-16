@@ -5,7 +5,7 @@
 @inject IJSRuntime js
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
-@inject Services.SessionService SessionService
+@*@inject Services.SessionService SessionService*@
 
 <PageTitle>Logga In</PageTitle>
 
@@ -73,35 +73,19 @@
 @code {
     private Models.LoginModel loginModel = new Models.LoginModel();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        this.loginModel.Username = await this.SessionService.GetUsername();
-        this.loginModel.Password = await this.SessionService.GetPassword();
+        //this.loginModel.Username = await this.SessionService.GetUsername();
+        //this.loginModel.Password = await this.SessionService.GetPassword();
 
-        if(!string.IsNullOrEmpty(this.loginModel.Username) || !string.IsNullOrEmpty(this.loginModel.Password))
-        {
-            await this.Authenticate();
-        }
+        //if(!string.IsNullOrEmpty(this.loginModel.Username) || !string.IsNullOrEmpty(this.loginModel.Password))
+        //{
+        //    await this.Authenticate();
+        //}
     }
 
     private async Task Authenticate()
     {
-        //var userAccount = userAccountService.GetByUsername(loginModel.Username.ToLower());
-        //if (userAccount == null || userAccount.Password != loginModel.Password)
-        //{
-        //    await js.InvokeVoidAsync("alert", "Invalid Username or Password.");
-        //    this.loginModel.Username = string.Empty;
-        //    this.loginModel.Password = string.Empty;
-        //    return;
-        //}
-
-        //var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-        //await customAuthStateProvider.UpdateAuthenticationState(new UserSession
-        //    {
-        //        Username = userAccount.Username,
-        //        Role = userAccount.Role
-        //    });
-
         var user = await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password);
         //if (await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))
 
@@ -114,7 +98,7 @@
                     Role = user.Role
                 });
 
-            await this.SessionService.AddUser(user.Username, user.Password);
+            //await this.SessionService.AddUser(user.Username, user.Password);
         }
         else
         {
