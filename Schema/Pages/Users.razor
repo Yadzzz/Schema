@@ -76,6 +76,10 @@
                                     <input id="lastNameInput" type="text" class="form-control" placeholder="Efternamn" aria-label="Efternamn" @bind-value="this._selectedUser.LastName" @bind-value:event="oninput">
                                 </div>
                                 <div class="col-sm-6">
+                                    <label for="forordnandateDateInput">Forördnande Utgång</label>
+                                    <input id="forordnandateDateInput" type="text" class="form-control" placeholder="Forördnande" aria-label="Forördnande" @bind-value="this._selectedUser.ForordnandeDate" @bind-value:event="oninput">
+                                </div>
+                                <div class="col-sm-6">
                                     <label for="roleControlSelect">Behörigheter</label>
                                     <select class="form-select" id="roleControlSelect" @onchange=@OnChangeUserRole>
                                         @if (this._selectedUser?.Role.ToLower() == "administrator")
@@ -148,7 +152,7 @@
         }
 
         if (string.IsNullOrEmpty(this._selectedUser.Username) || string.IsNullOrEmpty(this._selectedUser.Password) || string.IsNullOrEmpty(this._selectedUser.FirstName)
-            || string.IsNullOrEmpty(this._selectedUser.LastName) || string.IsNullOrEmpty(this._selectedUser.Role))
+            || string.IsNullOrEmpty(this._selectedUser.LastName) || string.IsNullOrEmpty(this._selectedUser.Role) || string.IsNullOrEmpty(this._selectedUser.ForordnandeDate))
         {
             return;
         }

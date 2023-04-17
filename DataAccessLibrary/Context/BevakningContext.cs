@@ -22,7 +22,7 @@ public partial class BevakningContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LT-KBA-YAD;Initial Catalog=Bevakning;User ID=yad;Password=123;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_a97d46_vast;User Id=db_a97d46_vast_admin;Password=vast123vast");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,6 +48,7 @@ public partial class BevakningContext : DbContext
             entity.Property(e => e.FirstName).HasMaxLength(100);
             entity.Property(e => e.LastName).HasMaxLength(100);
             entity.Property(e => e.Active).HasColumnType("bit");
+            entity.Property(e => e.ForordnandeDate).HasMaxLength(100);
         });
 
         OnModelCreatingPartial(modelBuilder);

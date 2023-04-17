@@ -18,4 +18,6 @@ public partial class User
     public string? LastName { get; set; }
 
     public bool Active { get; set; }
+
+    public string? ForordnandeDate { get; set; }
 }

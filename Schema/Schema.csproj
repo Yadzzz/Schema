@@ -29,4 +29,10 @@
     <ProjectReference Include="..\DataAccessLibrary\DataAccessLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Availablity.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>
