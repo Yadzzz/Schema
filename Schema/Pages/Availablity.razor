@@ -4,30 +4,41 @@
 @inject Services.PageNavigationService PageNavService
 @inject Services.UsersService UsersService
 @inject Services.BookingsService BookingsService
+@inject AuthenticationStateProvider authStateProvider
 
 <div class="row layout-top-spacing">
-
     <div class="row layout-top-spacing" />
 
-    
+
 </div>
 
 @code {
     private DataAccessLibrary.Models.User? _user;
-    private List<DataAccessLibrary.Models.Schedule>? _bookings;
     private bool _showLatestBookings = false;
 
     protected override async Task OnInitializedAsync()
     {
-        this._user = await this.UsersService.GetUser("");
+        var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
+        var state = await loggedInUser.GetAuthenticationStateAsync();
+        string username = state?.User?.Identity?.Name ?? "";
+
+        if(!string.IsNullOrEmpty(username))
+        {
+            this._user = await this.UsersService.GetUser(username);
+
+            if(this._user != null)
+            {
+                
+            }
+        }
+
+        this.PageNavService.UpdateActivePage("Availablity");
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            this.PageNavService.UpdateActivePage("Availablity");
-
             await JS.InvokeVoidAsync("OnScrollEvent");
             this.StateHasChanged();
         }

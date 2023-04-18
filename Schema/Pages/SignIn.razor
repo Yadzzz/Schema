@@ -6,11 +6,15 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 @*@inject Services.SessionService SessionService*@
+@inject Services.UserDataService UserDataService
 
 <PageTitle>Logga In</PageTitle>
 
-<link href="../src/assets/css/dark/authentication/auth-boxed.css" rel="stylesheet" type="text/css" />
-<link href="../layouts/horizontal-dark-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
+<link href="../src/assets/css/light/authentication/auth-boxed.css" rel="stylesheet" type="text/css" />
+<link href="../layouts/horizontal-dark-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
+
+@*<link href="../src/assets/css/dark/authentication/auth-boxed.css" rel="stylesheet" type="text/css" />
+<link href="../layouts/horizontal-dark-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />*@
 
 <div class="auth-container d-flex">
 
@@ -25,19 +29,19 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
 
-                                <h2>Sign In</h2>
-                                <p>Enter your username and password to login</p>
+                                <h2>Logga In</h2>
+                                <p>Ange ditt användarnamn och lösenord för att logga in.</p>
 
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Username</label>
+                                    <label class="form-label">Användarnamn</label>
                                     <input type="text" class="form-control" @bind="this.loginModel.Username" @onkeydown="this.Enter">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="mb-4">
-                                    <label class="form-label">Password</label>
+                                    <label class="form-label">Lösenord</label>
                                     <input type="password" class="form-control" @bind="this.loginModel.Password" @onkeydown="this.Enter">
                                 </div>
                             </div>
@@ -54,7 +58,7 @@
 
                             <div class="col-12">
                                 <div class="mb-4">
-                                    <button class="btn btn-secondary w-100" @onclick="this.Authenticate">Sign In</button>
+                                    <button class="btn btn-dark w-100" @onclick="this.Authenticate">Logga In</button>
                                 </div>
                             </div>
 
@@ -98,7 +102,7 @@
                     Role = user.Role
                 });
 
-            //await this.SessionService.AddUser(user.Username, user.Password);
+            await this.UserDataService.InitializeUserData(user.Username);
         }
         else
         {

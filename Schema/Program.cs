@@ -23,10 +23,12 @@ namespace Schema
             builder.Services.AddSingleton<UserAccountService>();
             builder.Services.AddScoped<PageNavigationService>();
             builder.Services.AddTransient<CalendarService>();
-            builder.Services.AddTransient<BevakningContext>();
+            //builder.Services.AddTransient<BevakningContext>();
+            builder.Services.AddDbContext<BevakningContext>(ServiceLifetime.Scoped);
             builder.Services.AddTransient<UsersService>();
             builder.Services.AddTransient<BookingsService>();
             //builder.Services.AddTransient<SessionService>();
+            builder.Services.AddScoped<UserDataService>();
 
             var app = builder.Build();
 

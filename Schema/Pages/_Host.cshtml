@@ -12,22 +12,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>Västkust Bevakning</title>
     <link rel="icon" type="image/x-icon" href="../../src/assets/img/favicon.ico" />
-    <!-- ENABLE LOADERS -->
+
     <link href="../../layouts/vertical-dark-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
     <link href="../../layouts/vertical-dark-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
-    <script src="../../layouts/vertical-dark-menu/loader.js"></script>
     <script src="../../layouts/vertical-light-menu/loader.js"></script>
-    <!-- /ENABLE LOADERS -->
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../../layouts/vertical-dark-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
     <link href="../../layouts/vertical-dark-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
     <link rel="stylesheet" type="text/css" href="../../src/assets/css/light/elements/alert.css">
     <link rel="stylesheet" type="text/css" href="../../src/assets/css/dark/elements/alert.css">
-    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+
+
+
+
+
+
+
+    @*<link href="../../layouts/modern-light-menu/css/light/loader.css" rel="stylesheet" type="text/css" />
+    <link href="../../layouts/modern-light-menu/css/dark/loader.css" rel="stylesheet" type="text/css" />
+    <script src="../../layouts/modern-light-menu/loader.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="../../src/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../layouts/modern-light-menu/css/light/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="../../layouts/modern-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../src/assets/css/light/elements/alert.css">
+    <link rel="stylesheet" type="text/css" href="../../src/assets/css/dark/elements/alert.css">*@
+
+
+
+
+
+
 
     <style>
         body.dark .layout-px-spacing, .layout-px-spacing {
@@ -51,7 +67,6 @@
         width:100%;
         overflow-x:hidden;
         overflow-y:hidden;">
-    @*<component type="typeof(App)" render-mode="ServerPrerendered" />*@
 
     <!-- BEGIN LOADER -->
     <div id="load_screen">
@@ -65,36 +80,35 @@
 
     <component type="typeof(App)" render-mode="ServerPrerendered" />
 
-    @*<div id="blazor-error-ui">
-        <environment include="Staging,Production">
-            An error has occurred. This application may no longer respond until reloaded.
-        </environment>
-        <environment include="Development">
-            An unhandled exception has occurred. See browser dev tools for details.
-        </environment>
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>*@
+    @*<script src="_framework/blazor.server.js"></script>*@
+    <script src="_framework/blazor.server.js" autostart="false"></script>
+    <script>
+        //Blazor.start().then(() => {
+        //    Blazor.defaultReconnectionHandler._reconnectCallback = function (d) {
+        //        document.location.reload();
+        //    }
+        //});
 
-    <script src="_framework/blazor.server.js"></script>
+        Blazor.start({
+            reconnectionOptions: {
+                maxRetries: 1,
+                retryIntervalMilliseconds: 1000
+            }
+        }).then(() => {
+            Blazor.defaultReconnectionHandler._reconnectCallback = function (d) {
+                document.location.reload();
+            }
+        });
+    </script>
 
     <script src="../../src/plugins/src/global/vendors.min.js"></script>
     <script src="../../src/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../../src/plugins/src/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="../../layouts/vertical-dark-menu/app.js"></script>
-    <script src="../../layouts/vertical-light-menu/app.js"></script>
+    @*<script src="../../layouts/vertical-dark-menu/app.js"></script>*@
+    @*<script src="../../layouts/vertical-light-menu/app.js"></script>*@
 
     <script src="../../src/assets/js/custom.js"></script>
     <script src="../components.js"></script>
-
-   @* <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="../src/plugins/src/fullcalendar/fullcalendar.min.js"></script>
-    <script src="../src/plugins/src/uuid/uuid4.min.js"></script>
-    <!-- END PAGE LEVEL SCRIPTS -->
-    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
-    <script src="../src/plugins/src/fullcalendar/custom-fullcalendar.js"></script>
-    <!--  END CUSTOM SCRIPTS FILE  -->
-    *@
 
 </body>
 </html>

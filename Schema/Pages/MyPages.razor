@@ -2,36 +2,56 @@
 
 @inject IJSRuntime JS
 @inject Services.PageNavigationService PageNavService
-@inject Services.UsersService UsersService
-@inject Services.BookingsService BookingsService
+@*@inject Services.UsersService UsersService*@
+@*@inject Services.BookingsService BookingsService*@
+@inject AuthenticationStateProvider authStateProvider
+@inject Services.UserDataService UserDataService
 
 <div class="row layout-top-spacing">
 
     <div class="row layout-top-spacing" />
 
-    
+    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+        <div class="statbox widget box box-shadow">
+            <div class="widget-header">
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                        <h4>Mina Sidor</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-content widget-content-area">
+
+                <div class="col-sm-12">
+                    <div class="d-grid gap-2 col-12 mx-auto">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @code {
-    private DataAccessLibrary.Models.User? _user;
-    private List<DataAccessLibrary.Models.Schedule>? _bookings;
-    private bool _showLatestBookings = false;
 
     protected override async Task OnInitializedAsync()
     {
-        this._user = await this.UsersService.GetUser("");
+        //var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
+        //var state = await loggedInUser.GetAuthenticationStateAsync();
+        //string username = state?.User?.Identity?.Name ?? "";
+
+        await this.UserDataService.LoadData();
+
+        this.PageNavService.UpdateActivePage("MyPages");
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            this.PageNavService.UpdateActivePage("MyPages");
-
             await JS.InvokeVoidAsync("OnScrollEvent");
             this.StateHasChanged();
         }
     }
-
-
 }
