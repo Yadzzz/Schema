@@ -1,0 +1,77 @@
+﻿<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">@Caption</h4>
+                <button type="button" class="close"
+                        @onclick="@Cancel">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>@Message</p>
+
+                @if (this.TakesInput)
+                {
+                    <input type="text" class="form-control form-control-sm" placeholder="Notering" @bind-value=@this.InputText />
+                }
+            </div>
+            <div class="modal-footer">
+                @switch (Type)
+                {
+                    case Category.Okay:
+                        <button type="button" class="btn btn-primary"
+                        @onclick=@Ok>
+                            OK
+                        </button>
+                        break;
+                    case Category.SaveNot:
+                        <button type="button" class="btn btn-primary"
+                        @onclick=@Ok>
+                            Spara
+                        </button>
+                        <button type="button" class="btn btn-danger"
+                        @onclick="@Cancel">
+                            Spara Inte
+                        </button>
+                        break;
+                    case Category.DeleteNot:
+                        <button type="button" class="btn btn-danger"
+                        @onclick=@Ok>
+                            Radera
+                        </button>
+                        <button type="button" class="btn btn-warning"
+                        @onclick="@Cancel">
+                            Radera Inte
+                        </button>
+                        break;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter] public string Caption { get; set; }
+    [Parameter] public string Message { get; set; }
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+    [Parameter] public Category Type { get; set; }
+    [Parameter] public bool TakesInput { get; set; }
+    public string InputText { get; set; } = string.Empty;
+
+    private Task Cancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private Task Ok()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+
+    public enum Category
+    {
+        Okay,
+        SaveNot,
+        DeleteNot
+    }
+}

@@ -152,9 +152,27 @@
 
 </div>
 
+<button text="test" @onclick=@OpenDialog>Test</button>
+
+@if (DialogIsOpen)
+{
+    <DialogModal Caption=@caption
+            Message="@message"
+            OnClose="@OnDialogClose"
+             Type="DialogModal.Category.Okay"
+            TakesInput="false"
+        @ref="dialogRef">
+    </DialogModal>
+}
+
 @code {
     private Calendar.Calendar? _calendar;
     private bool classicScheme = true;
+
+    private DialogModal? dialogRef = null;
+    private string caption;
+    private string message;
+    private bool DialogIsOpen = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -168,6 +186,29 @@
             this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
             this.StateHasChanged();
         }
+    }
+
+    private void OpenDialog()
+    {
+        caption = "Info";
+        message = "Notering: ";
+        DialogIsOpen = true;
+    }
+
+    private async Task OnDialogClose(bool isOk)
+    {
+        if (isOk)
+        {
+            if (this.dialogRef == null || string.IsNullOrEmpty(this.dialogRef.InputText))
+            {
+                return;
+            }
+
+            /////////////
+        }
+
+        this.dialogRef.InputText = "";
+        DialogIsOpen = false;
     }
 
     public void OnSchemeTypeClick()

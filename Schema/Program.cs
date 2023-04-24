@@ -29,6 +29,7 @@ namespace Schema
             builder.Services.AddTransient<BookingsService>();
             //builder.Services.AddTransient<SessionService>();
             builder.Services.AddScoped<UserDataService>();
+            builder.Services.AddTransient<AvailabilityService>();
 
             var app = builder.Build();
 

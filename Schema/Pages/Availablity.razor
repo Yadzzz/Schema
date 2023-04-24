@@ -5,6 +5,7 @@
 @inject Services.UsersService UsersService
 @inject Services.BookingsService BookingsService
 @inject AuthenticationStateProvider authStateProvider
+@inject Services.AvailabilityService AvailabilityService
 
 <div class="row layout-top-spacing">
     <div class="row layout-top-spacing" />
@@ -15,6 +16,7 @@
 @code {
     private DataAccessLibrary.Models.User? _user;
     private bool _showLatestBookings = false;
+    private List<DataAccessLibrary.Models.Availability>? availablities;
 
     protected override async Task OnInitializedAsync()
     {
@@ -28,7 +30,7 @@
 
             if(this._user != null)
             {
-                
+                this.availablities = await this.AvailabilityService.GetAvailabilitiesAsync(this._user.Id);
             }
         }
 

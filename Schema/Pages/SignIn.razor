@@ -26,44 +26,49 @@
                 <div class="card mt-3 mb-3">
                     <div class="card-body">
 
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
+                        @if (this.isLoading)
+                        {
+                                <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <h2>Logga In</h2>
+                                    <p>Ange ditt användarnamn och lösenord för att logga in.</p>
 
-                                <h2>Logga In</h2>
-                                <p>Ange ditt användarnamn och lösenord för att logga in.</p>
-
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Användarnamn</label>
-                                    <input type="text" class="form-control" @bind="this.loginModel.Username" @onkeydown="this.Enter">
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="mb-4">
-                                    <label class="form-label">Lösenord</label>
-                                    <input type="password" class="form-control" @bind="this.loginModel.Password" @onkeydown="this.Enter">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Användarnamn</label>
+                                        <input type="text" class="form-control" @bind="this.loginModel.Username" @onkeydown="this.Enter">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="mb-3">
-                                    @*<div class="form-check form-check-primary form-check-inline">
+                                <div class="col-12">
+                                    <div class="mb-4">
+                                        <label class="form-label">Lösenord</label>
+                                        <input type="password" class="form-control" @bind="this.loginModel.Password" @onkeydown="this.Enter">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        @*<div class="form-check form-check-primary form-check-inline">
                                     <input class="form-check-input me-3" type="checkbox" id="form-check-default">
                                     <label class="form-check-label" for="form-check-default">
                                     Remember me
                                     </label>
                                     </div>*@
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-12">
-                                <div class="mb-4">
-                                    <button class="btn btn-dark w-100" @onclick="this.Authenticate">Logga In</button>
+                                <div class="col-12">
+                                    <div class="mb-4">
+                                        <button class="btn btn-dark w-100" @onclick="this.Authenticate">Logga In</button>
+                                    </div>
                                 </div>
+
                             </div>
-
-                        </div>
-
+                        }
                     </div>
                 </div>
             </div>
@@ -76,6 +81,8 @@
 
 @code {
     private Models.LoginModel loginModel = new Models.LoginModel();
+
+    private bool isLoading = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -90,6 +97,10 @@
 
     private async Task Authenticate()
     {
+        this.isLoading = true;
+        this.StateHasChanged();
+        await Task.Delay(100);
+
         var user = await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password);
         //if (await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))
 
@@ -112,6 +123,8 @@
             return;
         }
 
+        this.isLoading = false;
+        this.StateHasChanged();
         //navManager.NavigateTo("/", true);
     }
 
