@@ -4,6 +4,7 @@
 @inject Services.PageNavigationService PageNavService
 @inject Services.UsersService UsersService
 @inject Services.BookingsService BookingsService
+@inject Services.NotificationService NotificationService
 
 <AuthorizeView Roles="Administrator" Context="usersPageContext">
     <Authorized>
@@ -11,18 +12,29 @@
 
             <div class="row layout-top-spacing" />
 
-            <div id="flAutoSizing" class="col-lg-12 layout-spacing">
-                <div class="statbox widget box box-shadow">
-                    <div class="widget-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                <h4>Bokningar</h4>
+            @if (this.isLoading)
+            {
+                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
+                    </div>
+                </div>
+            }
+            else
+            {
+
+                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>Bokningar</h4>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="widget-content widget-content-area">
+                        <div class="widget-content widget-content-area">
 
-                        @*<div class="form-group mb-4">
+                            @*<div class="form-group mb-4">
                         <label for="exampleFormControlSelect1">Användare</label>
                         <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
                         <option value="0">Välj Användare</option>
@@ -36,145 +48,145 @@
                         </select>
                         </div>*@
 
-                        <div class="col-sm-12">
-                            <div class="d-grid gap-2 col-12 mx-auto">
-                                <button class="btn btn-dark mb-4" @onclick="this.AddNewBooking">Lägg till Bokning</button>
-                                <button class="btn btn-dark mb-4" @onclick="this.GetBookings">Visa Senaste Bokningar</button>
-                                @if ((this._showLatestBookings && this._bookings != null && this._bookings.Count > 0) || this._selectedSchedule != null)
-                                {
-                                    <button class="btn btn-dark mb-4" @onclick="this.Reset">Återställ</button>
-                                }
+                            <div class="col-sm-12">
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-dark mb-4" @onclick="this.AddNewBooking">Lägg till Bokning</button>
+                                    <button class="btn btn-dark mb-4" @onclick="this.GetBookings">Visa Senaste Bokningar</button>
+                                    @if ((this._showLatestBookings && this._bookings != null && this._bookings.Count > 0) || this._selectedSchedule != null)
+                                    {
+                                        <button class="btn btn-dark mb-4" @onclick="this.Reset">Återställ</button>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row layout-top-spacing" />
+                <div class="row layout-top-spacing" />
 
-            @if (this._showLatestBookings && this._bookings != null && this._bookings.Count > 0)
-            {
-                <div id="tableSimple" class="col-lg-12 col-12 layout-spacing">
-                    <div class="statbox widget box box-shadow">
-                        <div class="widget-header">
-                            <div class="row">
-                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h4>Bokningar</h4>
+                @if (this._showLatestBookings && this._bookings != null && this._bookings.Count > 0)
+                {
+                    <div id="tableSimple" class="col-lg-12 col-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <h4>Bokningar</h4>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="widget-content widget-content-area">
+                            <div class="widget-content widget-content-area">
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Namn</th>
-                                            <th scope="col">Datum</th>
-                                            <th class="text-center" scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var booking in this._bookings.OrderByDescending(x => x.DateStart))
-                                        {
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
                                             <tr>
-                                                <td>@(this.GetUser(booking.UserId)?.FirstName + " " + this.GetUser(booking.UserId)?.LastName)</td>
-                                                <td>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                                    <span class="table-inner-text">@(booking.DateStart?.Date.Day + "/" + booking.DateStart?.Month + " " + booking.TimeStart + "-" + booking.TimeEnd)</span>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="action-btns">
-                                                        @*<a href="javascript:void(0);" class="action-btn btn-view bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="View">
+                                                <th scope="col">Namn</th>
+                                                <th scope="col">Datum</th>
+                                                <th class="text-center" scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var booking in this._bookings.OrderByDescending(x => x.DateStart))
+                                            {
+                                                <tr>
+                                                    <td>@(this.GetUser(booking.UserId)?.FirstName + " " + this.GetUser(booking.UserId)?.LastName)</td>
+                                                    <td>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                        <span class="table-inner-text">@(booking.DateStart?.Date.Day + "/" + booking.DateStart?.Month + " " + booking.TimeStart + "-" + booking.TimeEnd)</span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="action-btns">
+                                                            @*<a href="javascript:void(0);" class="action-btn btn-view bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="View">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                                 </a>*@
-                                                        <a href="javascript:void(0);" @onclick=@(() => this.Select(booking)) class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                                        </a>
-                                                        <a href="javascript:void(0);" @onclick=@(() => this.Delete(booking)) class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
+                                                            <a href="javascript:void(0);" @onclick=@(() => this.Select(booking)) class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                                            </a>
+                                                            <a href="javascript:void(0);" @onclick=@(() => this.Delete(booking)) class="action-btn btn-delete bs-tooltip" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
-            @if (this._selectedSchedule != null)
-            {
-                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
-                    <div class="statbox widget box box-shadow">
-                        <div class="widget-header">
-                            <div class="row">
-                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <center><h4>Ny Bokning</h4></center>
+                @if (this._selectedSchedule != null)
+                {
+                    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <center><h4>Ny Bokning</h4></center>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="widget-content widget-content-area">
-                            <div class="row g-3">
-                                <div class="form-group mb-4">
-                                    <label for="exampleFormControlSelect1">Användare</label>
-                                    <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
-                                        <option value="0">Välj Användare</option>
-                                        @if (this._users != null && this._users.Count > 0)
-                                        {
-                                            foreach (var user in this._users)
+                            <div class="widget-content widget-content-area">
+                                <div class="row g-3">
+                                    <div class="form-group mb-4">
+                                        <label for="exampleFormControlSelect1">Användare</label>
+                                        <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
+                                            <option value="0">Välj Användare</option>
+                                            @if (this._users != null && this._users.Count > 0)
                                             {
-                                                if (this._selectedSchedule.UserId == user.Id)
+                                                foreach (var user in this._users)
                                                 {
-                                                    <option value="@user.Id" selected>@(user.FirstName + " " + user.LastName)</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                                    if (this._selectedSchedule.UserId == user.Id)
+                                                    {
+                                                        <option value="@user.Id" selected>@(user.FirstName + " " + user.LastName)</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                                    }
                                                 }
                                             }
-                                        }
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="usernameInput">Startdatum</label>
-                                    <InputDate @bind-Value="this._selectedSchedule.DateStart" />
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="usernameInput">Slutdatum</label>
-                                    <InputDate @bind-Value="this._selectedSchedule.DateEnd" />
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="usernameInput">Starttid</label>
-                                    <input id="usernameInput" type="text" class="form-control" placeholder="e.g 22:00" @bind-value="this._selectedSchedule.TimeStart" @bind-value:event="oninput">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="usernameInput">Sluttid</label>
-                                    <input id="usernameInput" type="text" class="form-control" placeholder="e.g 03:45" @bind-value="this._selectedSchedule.TimeEnd" @bind-value:event="oninput">
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label for="exampleFormControlSelect1">Användare</label>
-                                    <select class="form-select" id="exampleFormControlSelect1" @onchange="this.OnChangeJobType">
-                                        <option value="0">Jobbtyp</option>
-                                        @if (this.jobTypes != null && this.jobTypes.Count > 0)
-                                        {
-                                            foreach (var job in this.jobTypes)
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="usernameInput">Startdatum</label>
+                                        <InputDate @bind-Value="this._selectedSchedule.DateStart" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="usernameInput">Slutdatum</label>
+                                        <InputDate @bind-Value="this._selectedSchedule.DateEnd" />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="usernameInput">Starttid</label>
+                                        <input id="usernameInput" type="text" class="form-control" placeholder="e.g 22:00" @bind-value="this._selectedSchedule.TimeStart" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="usernameInput">Sluttid</label>
+                                        <input id="usernameInput" type="text" class="form-control" placeholder="e.g 03:45" @bind-value="this._selectedSchedule.TimeEnd" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="exampleFormControlSelect1">Jobtyp</label>
+                                        <select class="form-select" id="exampleFormControlSelect1" @onchange="this.OnChangeJobType">
+                                            <option value="0">Jobbtyp</option>
+                                            @if (this.jobTypes != null && this.jobTypes.Count > 0)
                                             {
-                                                if (this._selectedSchedule?.JobType?.ToLower() == job.ToLower())
+                                                foreach (var job in this.jobTypes)
                                                 {
-                                                    <option value="@job" selected>@job</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@job">@job</option>
+                                                    if (this._selectedSchedule?.JobType?.ToLower() == job.ToLower())
+                                                    {
+                                                        <option value="@job" selected>@job</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@job">@job</option>
+                                                    }
                                                 }
                                             }
-                                        }
-                                        @*else
+                                            @*else
                                     {
                                     <option value="0">Jobbtyp</option>
                                     <option value="Entrevärd">Entrevärd</option>
@@ -182,22 +194,26 @@
                                     <option value="Vaktchef">Vaktchef</option>
                                     <option value="Annat">Annat</option>
                                     }*@
-                                    </select>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="usernameInput">Arbetsplats</label>
+                                        <input id="usernameInput" type="text" class="form-control" placeholder="e.g Push" @bind-value="this._selectedSchedule.JobPlace" @bind-value:event="oninput">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <br /><br />
+                                <br /><br />
 
-                            <div class="col-sm-12">
-                                <div class="d-grid gap-2 col-12 mx-auto">
-                                    <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
+                                <div class="col-sm-12">
+                                    <div class="d-grid gap-2 col-12 mx-auto">
+                                        <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
-
         </div>
     </Authorized>
     <NotAuthorized>
@@ -206,6 +222,7 @@
 </AuthorizeView>
 
 @code {
+    private bool isLoading = true;
     private List<DataAccessLibrary.Models.User>? _users;
     private DataAccessLibrary.Models.Schedule? _selectedSchedule;
     private List<DataAccessLibrary.Models.Schedule>? _bookings;
@@ -226,10 +243,12 @@
                 "Entrevärd",
                 "Ordningsvakt",
                 "Vaktchef",
+                "Ledig Pass",
                 "Annat"
             };
 
             await JS.InvokeVoidAsync("OnScrollEvent");
+            this.isLoading = false;
             this.StateHasChanged();
         }
     }
@@ -239,17 +258,16 @@
         if (this._selectedSchedule == null) return;
 
         if (this._selectedSchedule.DateStart == null || string.IsNullOrEmpty(this._selectedSchedule.TimeStart) || string.IsNullOrEmpty(this._selectedSchedule.TimeEnd) ||
-            string.IsNullOrEmpty(this._selectedSchedule.JobType) || this._selectedSchedule.UserId == 0 || this._selectedSchedule.DateEnd == null)
+            string.IsNullOrEmpty(this._selectedSchedule.JobType) || this._selectedSchedule.UserId == 0 || this._selectedSchedule.DateEnd == null || string.IsNullOrEmpty(this._selectedSchedule.JobPlace))
         {
-            Console.WriteLine("NULL");
+            await this.NotificationService.AlertError("Vänligen fyll i alla fält!");
             return;
         }
 
         if (this._selectedSchedule.TimeStart.Length != 5 || this._selectedSchedule.TimeEnd.Length != 5 || !this._selectedSchedule.TimeStart.Contains(":")
             || !this._selectedSchedule.TimeEnd.Contains(":"))
         {
-
-
+            await this.NotificationService.AlertError("Fel tidsformat i fält Starttid eller Sluttid. Skall vara 22:00 format!");
             return;
         }
 
@@ -258,6 +276,7 @@
         if (!int.TryParse(startTime[0], out int start1) || !int.TryParse(startTime[1], out int start2) ||
             !int.TryParse(endTime[0], out int end1) || !int.TryParse(endTime[1], out int end2))
         {
+            await this.NotificationService.AlertError("Fel tidsformat i fält Starttid eller Sluttid. Skall vara 22:00 format!");
             return;
         }
 
@@ -280,10 +299,11 @@
             if (success)
             {
                 await this.FlushBookings();
+                await this.NotificationService.AlertSuccess("Bokning tillagd!");
             }
             else
             {
-
+                await this.NotificationService.AlertError("Error #494xs2l3, kontakta server admin!");
             }
         }
         else
@@ -294,10 +314,11 @@
             if (success)
             {
                 await this.FlushBookings();
+                await this.NotificationService.AlertSuccess("Bokning uppdaterad!");
             }
             else
             {
-
+                await this.NotificationService.AlertError("Error #493444xs2l3, kontakta server admin!");
             }
         }
 
@@ -313,10 +334,11 @@
         if (success)
         {
             await this.FlushBookings();
+            await this.NotificationService.AlertSuccess("Bokning raderad!");
         }
         else
         {
-
+            await this.NotificationService.AlertError("Error #KJS3K30F00, kontakta server admin!");
         }
     }
 

@@ -44,37 +44,58 @@
                 string saturday = "";
                 string sunday = "";
 
-                foreach(var date in dates)
+                int mondayId = 0;
+                int tuesdayId = 0;
+                int wednesdayId = 0;
+                int thursdayId = 0;
+                int fridayId = 0;
+                int saturdayId = 0;
+                int sundayId = 0;
+
+                foreach (var date in dates)
                 {
                     var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).FirstOrDefault();
 
-                    switch(date.DayOfWeek)
+                    if (scheduledDateForUser == null)
+                    {
+                        continue;
+                    }
+
+                    switch (date.DayOfWeek)
                     {
                         case DayOfWeek.Monday:
                             monday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            mondayId = scheduledDateForUser.Id;
                             break;
                         case DayOfWeek.Tuesday:
                             tuesday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            tuesdayId = scheduledDateForUser.Id;
                             break;
                         case DayOfWeek.Wednesday:
                             wednesday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            wednesdayId = scheduledDateForUser.Id;
                             break;
                         case DayOfWeek.Thursday:
                             thursday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            thursdayId = scheduledDateForUser.Id;
                             break;
                         case DayOfWeek.Friday:
                             friday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            fridayId = scheduledDateForUser.Id;
                             break;
                         case DayOfWeek.Saturday:
                             saturday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            saturdayId = scheduledDateForUser.Id;
                             break;
                         case DayOfWeek.Sunday:
                             sunday = scheduledDateForUser?.TimeStart + "-" + scheduledDateForUser?.TimeEnd;
+                            sundayId = scheduledDateForUser.Id;
                             break;
                     }
                 }
 
-                rows.Add(new CalendarRow(firstName, monday, tuesday, wednesday, thursday, friday, saturday, sunday));
+                //rows.Add(new CalendarRow(firstName, monday, tuesday, wednesday, thursday, friday, saturday, sunday));
+                rows.Add(new CalendarRow(firstName, mondayId, monday, tuesdayId, tuesday, wednesdayId, wednesday, thursdayId, thursday, fridayId, friday, saturdayId, saturday, sundayId, sunday));
             }
 
             return rows;

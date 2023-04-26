@@ -30,6 +30,25 @@ namespace Schema.Services
             }
         }
 
+        public async Task<DataAccessLibrary.Models.Schedule?> GetBooking(int bookingId)
+        {
+            if (this._bevakningContext == null || this._bevakningContext.Schedules == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return await this._bevakningContext.Schedules.FindAsync(bookingId);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
         public async Task<List<DataAccessLibrary.Models.Schedule>?> GetBookingsForUser(int userId)
         {
             if (this._bevakningContext == null || this._bevakningContext.Schedules == null)

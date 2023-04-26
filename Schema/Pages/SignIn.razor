@@ -7,6 +7,7 @@
 @inject NavigationManager navManager
 @*@inject Services.SessionService SessionService*@
 @inject Services.UserDataService UserDataService
+@inject Services.NotificationService NotificationService
 
 <PageTitle>Logga In</PageTitle>
 
@@ -117,10 +118,10 @@
         }
         else
         {
-            await js.InvokeVoidAsync("alert", "Invalid Username or Password.");
+            await this.NotificationService.AlertError("Fel användarnamn eller lösenord!");
+            //await js.InvokeVoidAsync("alert", "Invalid Username or Password.");
             this.loginModel.Username = string.Empty;
             this.loginModel.Password = string.Empty;
-            return;
         }
 
         this.isLoading = false;

@@ -6,34 +6,238 @@
 @*@inject Services.BookingsService BookingsService*@
 @inject AuthenticationStateProvider authStateProvider
 @inject Services.UserDataService UserDataService
+@inject Services.NotificationService NotificationService
 
 <div class="row layout-top-spacing">
 
     <div class="row layout-top-spacing" />
 
-    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
-        <div class="statbox widget box box-shadow">
-            <div class="widget-header">
-                <div class="row">
-                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                        <h4>Mina Sidor (@this.UserDataService.Username)</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="widget-content widget-content-area">
-
-                <div class="col-sm-12">
-                    <div class="d-grid gap-2 col-12 mx-auto">
-                        
-                    </div>
-                </div>
+    @if (this.isLoading)
+    {
+        <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Totalt Arbetad</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div class="form-group mb-4">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="roleControlSelect">Månad</label>
+                                <select class="form-select" id="roleControlSelect" @onchange=@OnChangeMonthSelect>
+                                    <option value="0" selected>Välj Månad</option>
+                                    <option value="1">Januari</option>
+                                    <option value="2">Februari</option>
+                                    <option value="3">Mars</option>
+                                    <option value="4">April</option>
+                                    <option value="5">Maj</option>
+                                    <option value="6">Juni</option>
+                                    <option value="7">Juli</option>
+                                    <option value="8">Augusti</option>
+                                    <option value="9">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
 
+                            <div class="col-sm-6">
+                                <label for="yearinput">År (eg 2023)</label>
+                                <input id="yearinput" class="form-control" type="number" @bind-value="@yearInput" />
+                            </div>
+
+                            <div class="form-group mb-4">
+                            @*<div class="col-sm-6">*@
+                                <label for="searchbookingsbutton">Visa Pass</label>
+                                <button id="searchbookingsbutton" type="button" class="btn btn-primary" @onclick="this.CalculateMonths">Visa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (this._selectedMonthlySpecification != null)
+                {
+                    <hr />
+
+                    <div class="widget-content widget-content-area">
+
+                        <div class="col-sm-12">
+                            <div class="d-grid gap-2 col-12 mx-auto">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Månad</th>
+                                                <th scope="col">Antal Pass</th>
+                                                <th scope="col">Antal Timmar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @(System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(this._selectedMonthlySpecification.Month))
+                                                </td>
+
+                                                <td>
+                                                    @(this._selectedMonthlySpecification.Days)
+                                                </td>
+                                                <td>
+                                                    @(this._selectedMonthlySpecification.Hours)
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Datum</th>
+                                                    <th scope="col">Tid</th>
+                                                    <th scope="col">Plats</th>
+                                                    <th scope="col">Tjänst</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var booking in this._selectedMonthlySpecification.Bookings.OrderByDescending(x => x.DateStart))
+                                                {
+                                                    <tr>
+                                                        <td>@(booking?.DateStart?.ToShortDateString() + " - " + booking?.DateEnd?.ToShortDateString())</td>
+                                                        <td>@(booking?.TimeStart + " - " + booking?.TimeEnd)</td>
+                                                        <td>@(booking?.JobPlace)</td>
+                                                        <td>@(booking?.JobType)</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+
+                @* @if (this._monthlySpecifications != null && this._monthlySpecifications.Length == 13)
+            {
+            <div class="widget-content widget-content-area">
+
+            <div class="col-sm-12">
+            <div class="d-grid gap-2 col-12 mx-auto">
+
+            <div class="table-responsive">
+            <table class="table table-bordered">
+            <thead>
+            <tr>
+            <th scope="col">Månad</th>
+            <th scope="col">Antal Pass</th>
+            <th scope="col">Antal Timmar</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var month in this._monthlySpecifications)
+            {
+            if(month == null || month.Month == 0)
+            {
+            continue;
+            }
+
+            <tr>
+            <td>
+            @(System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Month))
+            </td>
+
+            <td>@(month.Days)
+            </td>
+            <td>
+            @(month.Hours)
+            </td>
+            </tr>
+            }
+            </tbody>
+            </table>
+
+            </div>
+            </div>
+            </div>
+
+            </div>
+            }*@
+            </div>
+        </div>
+
+        @if (this._bookings != null)
+        {
+            <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-header">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                <h4>Mina kommande pass</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content widget-content-area">
+
+                        <div class="col-sm-12">
+                            <div class="d-grid gap-2 col-12 mx-auto">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Datum</th>
+                                                <th scope="col">Tid</th>
+                                                <th scope="col">Plats</th>
+                                                <th scope="col">Tjänst</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var booking in this._bookings.OrderByDescending(x => x.DateStart))
+                                            {
+                                                <tr>
+                                                    <td>@(booking?.DateStart?.ToShortDateString() + " - " + booking?.DateEnd?.ToShortDateString())</td>
+                                                    <td>@(booking?.TimeStart + " - " + booking?.TimeEnd)</td>
+                                                    <td>@(booking?.JobPlace)</td>
+                                                    <td>@(booking?.JobType)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 </div>
 
 @code {
+    private bool isLoading = true;
+    private List<DataAccessLibrary.Models.Schedule>? _bookings;
+
+    private MonthlySpecification[]? _monthlySpecifications;
+
+    private MonthlySpecification? _selectedMonthlySpecification;
+    private int yearInput = 2023;
+    private int monthInput = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,8 +246,13 @@
         //string username = state?.User?.Identity?.Name ?? "";
 
         await this.UserDataService.LoadData();
+        this._bookings = this.UserDataService.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days > 0).ToList();
+
+        //await this.CalculateMonths();
 
         this.PageNavService.UpdateActivePage("MyPages");
+        this.isLoading = false;
+        this.StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -53,5 +262,113 @@
             await JS.InvokeVoidAsync("OnScrollEvent");
             this.StateHasChanged();
         }
+    }
+
+    private void OnChangeMonthSelect(ChangeEventArgs e)
+    {
+        int inputValue = int.Parse(e?.Value?.ToString());
+        this.monthInput = inputValue;
+    }
+
+    private async Task CalculateMonths()
+    {
+        this.isLoading = true;
+        this.StateHasChanged();
+
+        this._selectedMonthlySpecification = null;
+
+        if (this.yearInput == 0 || this.monthInput == 0)
+        {
+            await this.NotificationService.AlertError("Välj år och månad!");
+            this.isLoading = false;
+            this.StateHasChanged();
+            return;
+        }
+
+        //if (this._monthlySpecifications == null)
+        //{
+        //    this._monthlySpecifications = new MonthlySpecification[13];
+        //}
+
+        //for (int i = 1; i <= 12; i++)
+        {
+            //int month = i;
+            int month = this.monthInput;
+            int days = 0;
+            double hours = 0;
+
+            var totalBookings = this.UserDataService?.Bookings?.Where(x => x?.DateStart?.Year == this.yearInput && x?.DateStart?.Month == this.monthInput).ToList();
+
+            if (totalBookings == null|| totalBookings.Count == 0)
+            {
+                await this.NotificationService.AlertError("Inga bokningar hittades!");
+                this.isLoading = false;
+                this.StateHasChanged();
+                return;
+            }
+
+            List<DataAccessLibrary.Models.Schedule> bookingsToRemove = new();
+
+            foreach (var booking in totalBookings)
+            {
+                if (booking.DateStart == null || booking.DateEnd == null || booking.TimeStart == null || booking.TimeEnd == null ||
+                    booking.TimeStart.Length != 5 || booking.TimeEnd.Length != 5 || !booking.TimeStart.Contains(":") || !booking.TimeEnd.Contains(":"))
+                {
+                    Console.WriteLine("#7FDH38FH57665JFLKDJS82090");
+                    continue;
+                }
+
+                if ((DateTime.Now - booking.DateEnd)?.Minutes < 0)
+                {
+                    bookingsToRemove.Add(booking);
+                    continue;
+                }
+
+                string[] timeStart = booking.TimeStart.Split(":");
+                DateTime start = new DateTime(booking.DateStart.Value.Year, booking.DateStart.Value.Month, booking.DateStart.Value.Day,
+                                            int.Parse(timeStart[0]), int.Parse(timeStart[1]), 0);
+
+                string[] timeEnd = booking.TimeEnd.Split(":");
+                DateTime end = new DateTime(booking.DateEnd.Value.Year, booking.DateEnd.Value.Month, booking.DateEnd.Value.Day,
+                                            int.Parse(timeEnd[0]), int.Parse(timeEnd[1]), 0);
+
+                hours += (end - start).TotalHours;
+            }
+
+            foreach(var booking in bookingsToRemove)
+            {
+                totalBookings.Remove(booking);
+            }
+
+            days = totalBookings.Count();
+
+            //this._monthlySpecifications[i] = new MonthlySpecification()
+            //    {
+            //        Month = month,
+            //        Days = days,
+            //        Hours = hours
+            //    };
+
+            this._selectedMonthlySpecification = new MonthlySpecification()
+                {
+                    Month = month,
+                    Days = days,
+                    Hours = hours,
+                    Bookings = totalBookings.ToList()
+                };
+        }
+
+        await this.NotificationService.AlertSuccess("Bokningar hämtad!");
+        this.isLoading = false;
+        this.StateHasChanged();
+    }
+
+    private class MonthlySpecification
+    {
+        public int Month { get; set; }
+        public int Days { get; set; }
+        public double Hours { get; set; }
+
+        public List<DataAccessLibrary.Models.Schedule> Bookings { get; set; }
     }
 }

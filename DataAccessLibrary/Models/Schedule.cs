@@ -18,4 +18,6 @@ public partial class Schedule
     public string? TimeEnd { get; set; }
 
     public string? JobType { get; set; }
+
+    public string? JobPlace { get; set; }
 }

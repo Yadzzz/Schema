@@ -3,6 +3,7 @@
 @inject IJSRuntime JS
 @inject Services.PageNavigationService PageNavService
 @inject Services.UsersService UsersService
+@inject Services.NotificationService NotificationService
 
 <AuthorizeView Roles="Administrator" Context="usersPageContext">
     <Authorized>
@@ -10,113 +11,124 @@
 
             <div class="row layout-top-spacing" />
 
-            <div id="flAutoSizing" class="col-lg-12 layout-spacing">
-                <div class="statbox widget box box-shadow">
-                    <div class="widget-header">
-                        <div class="row">
-                            <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                <h4>Användare</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget-content widget-content-area">
-
-                        <div class="form-group mb-4">
-                            <label for="exampleFormControlSelect1">Användare</label>
-                            <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
-                                <option value="0">Välj Användare</option>
-                                @if (this._users != null && this._users.Count > 0)
-                                {
-                                    foreach (var user in this._users)
-                                    {
-                                        <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="d-grid gap-2 col-12 mx-auto">
-                                <button class="btn btn-dark mb-4" @onclick="this.AddNewUser">Lägg till ny Användare</button>
-                            </div>
-                        </div>
+            @if (this.isLoading)
+            {
+                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
                     </div>
                 </div>
-            </div>
-
-            <div class="row layout-top-spacing" />
-
-            @if (this._selectedUser != null)
+            }
+            else
             {
                 <div id="flAutoSizing" class="col-lg-12 layout-spacing">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
                             <div class="row">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <center><h4>@this._selectedUser.Username</h4></center>
+                                    <h4>Användare</h4>
                                 </div>
                             </div>
                         </div>
                         <div class="widget-content widget-content-area">
-                            <div class="row g-3">
-                                <div class="col-sm-6">
-                                    <label for="usernameInput">Användarnamn</label>
-                                    <input id="usernameInput" type="text" class="form-control" aria-label="Användarnamn" @bind-value="this._selectedUser.Username" @bind-value:event="oninput">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="passwordInput">Lösenord</label>
-                                    <input id="passwordInput" type="text" class="form-control" aria-label="Lösenord" @bind-value="this._selectedUser.Password" @bind-value:event="oninput">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="firstNameInput">Namn</label>
-                                    <input id="firstNameInput" type="text" class="form-control" placeholder="Namn" aria-label="Namn" @bind-value="this._selectedUser.FirstName" @bind-value:event="oninput">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="lastNameInput">Efternamn</label>
-                                    <input id="lastNameInput" type="text" class="form-control" placeholder="Efternamn" aria-label="Efternamn" @bind-value="this._selectedUser.LastName" @bind-value:event="oninput">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="forordnandateDateInput">Forördnande Utgång</label>
-                                    <input id="forordnandateDateInput" type="text" class="form-control" placeholder="Forördnande" aria-label="Forördnande" @bind-value="this._selectedUser.ForordnandeDate" @bind-value:event="oninput">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="roleControlSelect">Behörigheter</label>
-                                    <select class="form-select" id="roleControlSelect" @onchange=@OnChangeUserRole>
-                                        @if (this._selectedUser?.Role.ToLower() == "administrator")
-                                        {
-                                            <option value="1" selected>Administrator</option>
-                                            <option value="2">User</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="1">Administrator</option>
-                                            <option value="2" selected>User</option>
-                                        }
-                                    </select>
-                                </div>
 
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="customCheck1" checked="@this._selectedUser.Active" @onclick="this.OnTriggerActiveCheckbox">
-                                        <label class="form-check-label" for="customCheck1">Konto Aktiv</label>
-                                    </div>
-                                </div>
+                            <div class="form-group mb-4">
+                                <label for="exampleFormControlSelect1">Användare</label>
+                                <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
+                                    <option value="0">Välj Användare</option>
+                                    @if (this._users != null && this._users.Count > 0)
+                                    {
+                                        foreach (var user in this._users)
+                                        {
+                                            <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                        }
+                                    }
+                                </select>
                             </div>
-
-                            <br /><br />
 
                             <div class="col-sm-12">
                                 <div class="d-grid gap-2 col-12 mx-auto">
-                                    <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
-                                    @if (this._selectedUser != null && this._selectedUser.Id != 0)
-                                    {
-                                        <button class="btn btn-dark mb-4" @onclick="this.Delete">Radera</button>
-                                    }
+                                    <button class="btn btn-dark mb-4" @onclick="this.AddNewUser">Lägg till ny Användare</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="row layout-top-spacing" />
+
+                @if (this._selectedUser != null)
+                {
+                    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <center><h4>@this._selectedUser.Username</h4></center>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area">
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <label for="usernameInput">Användarnamn</label>
+                                        <input id="usernameInput" type="text" class="form-control" aria-label="Användarnamn" @bind-value="this._selectedUser.Username" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="passwordInput">Lösenord</label>
+                                        <input id="passwordInput" type="password" class="form-control" aria-label="Lösenord" @bind-value="this._selectedUser.Password" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="firstNameInput">Namn</label>
+                                        <input id="firstNameInput" type="text" class="form-control" placeholder="Namn" aria-label="Namn" @bind-value="this._selectedUser.FirstName" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="lastNameInput">Efternamn</label>
+                                        <input id="lastNameInput" type="text" class="form-control" placeholder="Efternamn" aria-label="Efternamn" @bind-value="this._selectedUser.LastName" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="forordnandateDateInput">Forördnande Utgång</label>
+                                        <input id="forordnandateDateInput" type="text" class="form-control" placeholder="Forördnande" aria-label="Forördnande" @bind-value="this._selectedUser.ForordnandeDate" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="roleControlSelect">Behörigheter</label>
+                                        <select class="form-select" id="roleControlSelect" @onchange=@OnChangeUserRole>
+                                            @if (this._selectedUser?.Role.ToLower() == "administrator")
+                                            {
+                                                <option value="1" selected>Administrator</option>
+                                                <option value="2">User</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="1">Administrator</option>
+                                                <option value="2" selected>User</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="customCheck1" checked="@this._selectedUser.Active" @onclick="this.OnTriggerActiveCheckbox">
+                                            <label class="form-check-label" for="customCheck1">Konto Aktiv</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br /><br />
+
+                                <div class="col-sm-12">
+                                    <div class="d-grid gap-2 col-12 mx-auto">
+                                        <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
+                                        @if (this._selectedUser != null && this._selectedUser.Id != 0)
+                                        {
+                                            <button class="btn btn-dark mb-4" @onclick="this.Delete">Radera</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             }
 
         </div>
@@ -127,6 +139,7 @@
 </AuthorizeView>
 
 @code {
+    private bool isLoading = true;
     private List<DataAccessLibrary.Models.User>? _users;
     private DataAccessLibrary.Models.User? _selectedUser;
 
@@ -140,6 +153,7 @@
 
             this._users = await this.UsersService.GetUsers();
             await JS.InvokeVoidAsync("OnScrollEvent");
+            this.isLoading = false;
             this.StateHasChanged();
         }
     }
@@ -148,12 +162,14 @@
     {
         if (this._selectedUser == null)
         {
+            await this.NotificationService.AlertError("Error #3423434, kontakta server admin!");
             return;
         }
 
         if (string.IsNullOrEmpty(this._selectedUser.Username) || string.IsNullOrEmpty(this._selectedUser.Password) || string.IsNullOrEmpty(this._selectedUser.FirstName)
             || string.IsNullOrEmpty(this._selectedUser.LastName) || string.IsNullOrEmpty(this._selectedUser.Role) || string.IsNullOrEmpty(this._selectedUser.ForordnandeDate))
         {
+            await this.NotificationService.AlertError("Vänligen fyll i alla fält!");
             return;
         }
 
@@ -166,10 +182,12 @@
             {
                 this._users = await this.UsersService.GetUsers();
                 this._selectedUser = null;
+
+                await this.NotificationService.AlertSuccess("Användare Tillagd!");
             }
             else
             {
-
+                await this.NotificationService.AlertError("Kunde inte lägga till användare!");
             }
         }
         else
@@ -180,18 +198,20 @@
             if (success)
             {
                 this._users = await this.UsersService.GetUsers();
+                await this.NotificationService.AlertSuccess("Användare Uppdaterad!");
             }
             else
             {
-
+                await this.NotificationService.AlertError("Kunde inte redigera till användare!");
             }
         }
     }
 
     private async Task Delete()
     {
-        if(this._selectedUser == null)
+        if (this._selectedUser == null)
         {
+            await this.NotificationService.AlertError("Error #949493, kontakta server admin!");
             return;
         }
 
@@ -201,10 +221,11 @@
         {
             await this.FlushUsers();
             this._selectedUser = null;
+            await this.NotificationService.AlertSuccess("Användare Raderad!");
         }
         else
         {
-
+            await this.NotificationService.AlertError("Kunde inte radera användare!");
         }
 
         this.StateHasChanged();
@@ -271,7 +292,5 @@
         {
             this._selectedUser.Active = true;
         }
-
-        Console.WriteLine(this._selectedUser.Active.ToString());
     }
 }

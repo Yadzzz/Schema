@@ -30,6 +30,7 @@ namespace Schema
             //builder.Services.AddTransient<SessionService>();
             builder.Services.AddScoped<UserDataService>();
             builder.Services.AddTransient<AvailabilityService>();
+            builder.Services.AddScoped<NotificationService>();
 
             var app = builder.Build();
 

@@ -33,3 +33,100 @@ function onPageClick1(dotNetHelper) {
 function isDevice() {
     return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile/i.test(navigator.userAgent);
 }
+
+function alertUser(text) {
+    //const toast = swal.mixin({
+    //    toast: true,
+    //    position: 'top-end',
+    //    showConfirmButton: false,
+    //    timer: 3000,
+    //    padding: '2em'
+    //});
+
+    //toast({
+    //    title: text,
+    //    padding: '2em',
+    //})
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        title: text
+    });
+}
+
+function alertUserSuccess(text) {
+    //const toast = swal.mixin({
+    //    toast: true,
+    //    position: 'top-end',
+    //    showConfirmButton: false,
+    //    timer: 3000,
+    //    padding: '2em'
+    //});
+
+    //toast({
+    //    type: 'success',
+    //    title: text,
+    //    padding: '2em',
+    //})
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'success',
+        title: text
+    });;
+}
+
+function alertUserError(text) {
+    //const toast = swal.mixin({
+    //    toast: true,
+    //    position: 'top-end',
+    //    showConfirmButton: false,
+    //    timer: 3000,
+    //    padding: '2em'
+    //});
+
+    //toast({
+    //    type: 'error',
+    //    title: text,
+    //    padding: '2em',
+    //})
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'error',
+        title: text
+    });
+}

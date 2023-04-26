@@ -3,6 +3,7 @@
 @inject IJSRuntime JS
 @inject Calendar.CalendarService CalendarService
 @inject Services.PageNavigationService PageNavService
+@inject Services.BookingsService BookingService
 
 <div class="row layout-top-spacing">
 
@@ -19,55 +20,65 @@
 
     <div class="row layout-top-spacing" />
 
-    <div class="d-grid gap-2 col-1 mx-auto">
-        <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.PreviousWeekButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        </button>
-    </div>
-
-    <div class="d-grid gap-2 col-1 mx-auto">
-        <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.NextWeekButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </button>
-    </div>
-
-    <br />
-    <p></p>
-    <hr />
-
-    @if (this.classicScheme)
+    @if (this.isLoading)
     {
-        <table class="table table" style="max-width:100%; table-layout:fixed; border-collapse: collapse; ">
-            <thead>
-                @if(this._calendar != null)
-                {
-                    <tr>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
-                        <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
-                    </tr>
-                }
-                else
-                {
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">M</th>
-                    <th scope="col">T</th>
-                    <th scope="col">O</th>
-                    <th scope="col">T</th>
-                    <th scope="col">F</th>
-                    <th scope="col">L</th>
-                    <th scope="col">S</th>
-                </tr>
-                }
-            </thead>
-            <tbody>
-                @*<tr>
+        <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="d-grid gap-2 col-1 mx-auto">
+            <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.PreviousWeekButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            </button>
+        </div>
+
+        <div class="d-grid gap-2 col-1 mx-auto">
+            <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.NextWeekButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+        </div>
+
+        <br />
+        <p></p>
+        <hr />
+
+        @if (this.classicScheme)
+        {
+            <table class="table table" style="max-width:100%; table-layout:fixed; border-collapse: collapse; ">
+                <thead>
+                    @if (this._calendar != null)
+                    {
+                        <tr>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">M</th>
+                            <th scope="col">T</th>
+                            <th scope="col">O</th>
+                            <th scope="col">T</th>
+                            <th scope="col">F</th>
+                            <th scope="col">L</th>
+                            <th scope="col">S</th>
+                        </tr>
+                    }
+                </thead>
+                <tbody>
+                    @*<tr>
             <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
             <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
             <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
@@ -77,101 +88,119 @@
             <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
             <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
             </tr>*@
-                @if (this._calendar != null && this._calendar.Rows.Count > 0)
-                {
-                    foreach (var row in this._calendar.Rows ?? Enumerable.Empty<Calendar.CalendarRow>())
+                    @if (this._calendar != null && this._calendar.Rows.Count > 0)
                     {
-                        <tr>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">@row.FirstName</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Monday</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Tuesday</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Wednesday</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Thursday</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Friday</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Saturday</div></td>
-                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.Sunday</div></td>
-                        </tr>
+                        foreach (var row in this._calendar.Rows.OrderByDescending(x => x.FirstName.ToLower() == "ledig-pass") ?? Enumerable.Empty<Calendar.CalendarRow>())
+                        {
+                            @if (row.FirstName.ToLower() == "ledig-pass")
+                            {
+                                <tr>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">@row.FirstName</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px; color:lightgreen" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">@row.FirstName</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                </tr>
+                            }
+                        }
                     }
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table table-bordered" style="font-size:8px;">
-                <thead>
-                    <tr>
-                        <th scope="col"></th>
-                        <th class="text-center" scope="col">M</th>
-                        <th class="text-center" scope="col">T</th>
-                        <th class="text-center" scope="col">O</th>
-                        <th class="text-center" scope="col">T</th>
-                        <th class="text-center" scope="col">F</th>
-                        <th class="text-center" scope="col">L</th>
-                        <th class="text-center" scope="col">S</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Yad Mohamad</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    </tr>
-                    <tr>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ahmad Djeza</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    </tr>
-                    <tr>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ali Al-Shafey</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                    </tr>
                 </tbody>
             </table>
-        </div>
-    }
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered" style="font-size:8px;">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th class="text-center" scope="col">M</th>
+                            <th class="text-center" scope="col">T</th>
+                            <th class="text-center" scope="col">O</th>
+                            <th class="text-center" scope="col">T</th>
+                            <th class="text-center" scope="col">F</th>
+                            <th class="text-center" scope="col">L</th>
+                            <th class="text-center" scope="col">S</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Yad Mohamad</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        </tr>
+                        <tr>
+                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ahmad Djeza</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        </tr>
+                        <tr>
+                            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">Ali Al-Shafey</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                            <td class="text-center"><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
 
-    <hr />
+        <hr />
+    }
 
 </div>
 
-<button text="test" @onclick=@OpenDialog>Test</button>
+@*<button text="test" @onclick=@OpenDialog>Test</button>*@
 
 @if (DialogIsOpen)
 {
     <DialogModal Caption=@caption
-            Message="@message"
-            OnClose="@OnDialogClose"
+             Message="@message"
+             OnClose="@OnDialogClose"
              Type="DialogModal.Category.Okay"
-            TakesInput="false"
-        @ref="dialogRef">
+             TakesInput="false"
+             @ref="dialogRef">
     </DialogModal>
 }
 
 @code {
+    private bool isLoading = true;
     private Calendar.Calendar? _calendar;
     private bool classicScheme = true;
 
     private DialogModal? dialogRef = null;
-    private string caption;
-    private string message;
+    private string? caption;
+    private string? message;
     private bool DialogIsOpen = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -184,30 +213,42 @@
 
             await JS.InvokeVoidAsync("OnScrollEvent");
             this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
+            this.isLoading = false;
             this.StateHasChanged();
         }
     }
 
-    private void OpenDialog()
+    private async Task OpenDialog(Calendar.CalendarRow calendarRow, int bookingId)
     {
-        caption = "Info";
-        message = "Notering: ";
+        var booking = await this.BookingService.GetBooking(bookingId);
+
+        if (booking == null)
+        {
+            return;
+        }
+
+        caption = calendarRow.FirstName;
+        message = $"<b>Start:</b> {booking.DateStart.Value.ToShortDateString()} {booking.TimeStart}  <br />";
+        message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToShortDateString()} {booking.TimeEnd} <br />";
+        message += $"<b>Typ:</b> {booking.JobType}  <br />";
+        message += $"<b>Plats:</b> {booking.JobPlace}  <br />";
+
         DialogIsOpen = true;
     }
 
     private async Task OnDialogClose(bool isOk)
     {
-        if (isOk)
-        {
-            if (this.dialogRef == null || string.IsNullOrEmpty(this.dialogRef.InputText))
-            {
-                return;
-            }
+        //if (isOk)
+        //{
+        //    if (this.dialogRef == null || string.IsNullOrEmpty(this.dialogRef.InputText))
+        //    {
+        //        return;
+        //    }
 
-            /////////////
-        }
+        //    /////////////
+        //}
 
-        this.dialogRef.InputText = "";
+        //this.dialogRef.InputText = "";
         DialogIsOpen = false;
     }
 

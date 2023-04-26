@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>@Message</p>
+                <p>@((MarkupString)Message)</p>
 
                 @if (this.TakesInput)
                 {
@@ -50,6 +50,7 @@
         </div>
     </div>
 </div>
+
 @code {
     [Parameter] public string Caption { get; set; }
     [Parameter] public string Message { get; set; }
