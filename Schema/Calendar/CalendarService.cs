@@ -35,7 +35,7 @@
             //Create a row
             foreach (var user in users)
             {
-                string firstName = user.FirstName ?? string.Empty;
+                string firstName = (user.FirstName + " " + user.LastName) ?? string.Empty;
                 string monday = "";
                 string tuesday = "";
                 string wednesday = "";
@@ -51,6 +51,11 @@
                 int fridayId = 0;
                 int saturdayId = 0;
                 int sundayId = 0;
+
+                if (user?.FirstName?.ToLower() == "ledigt-pass")
+                {
+                    firstName = user.FirstName;
+                }
 
                 foreach (var date in dates)
                 {

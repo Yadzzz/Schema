@@ -38,7 +38,7 @@
                                     <option value="0">Välj Användare</option>
                                     @if (this._users != null && this._users.Count > 0)
                                     {
-                                        foreach (var user in this._users)
+                                        foreach (var user in this._users.OrderBy(x => x.FirstName))
                                         {
                                             <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
                                         }

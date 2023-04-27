@@ -29,7 +29,7 @@
 
                         @if (this.isLoading)
                         {
-                                <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
+                            <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
                         }
                         else
                         {
@@ -101,6 +101,14 @@
         this.isLoading = true;
         this.StateHasChanged();
         await Task.Delay(100);
+
+        if (string.IsNullOrEmpty(this.loginModel.Username) || string.IsNullOrEmpty(this.loginModel.Password))
+        {
+            await this.NotificationService.AlertError("Fel användarnamn eller lösenord!");
+            this.isLoading = false;
+            this.StateHasChanged();
+            return;
+        }
 
         var user = await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password);
         //if (await userAccountService.AuthenticateUser(loginModel.Username, loginModel.Password, out UserAccount user))

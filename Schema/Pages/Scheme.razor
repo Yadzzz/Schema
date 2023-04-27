@@ -90,9 +90,9 @@
             </tr>*@
                     @if (this._calendar != null && this._calendar.Rows.Count > 0)
                     {
-                        foreach (var row in this._calendar.Rows.OrderByDescending(x => x.FirstName.ToLower() == "ledig-pass") ?? Enumerable.Empty<Calendar.CalendarRow>())
+                        foreach (var row in this._calendar.Rows.OrderByDescending(x => x.FirstName.ToLower() == "ledigt-pass") ?? Enumerable.Empty<Calendar.CalendarRow>())
                         {
-                            @if (row.FirstName.ToLower() == "ledig-pass")
+                            @if (row.FirstName.ToLower() == "ledigt-pass")
                             {
                                 <tr>
                                     <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
