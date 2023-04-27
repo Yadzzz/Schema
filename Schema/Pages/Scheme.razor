@@ -54,13 +54,13 @@
                     {
                         <tr>
                             <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
+                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
                         </tr>
                     }
                     else
@@ -95,27 +95,76 @@
                             @if (row.FirstName.ToLower() == "ledig-pass")
                             {
                                 <tr>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">@row.FirstName</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px; color:lightgreen" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
+                                    @if (row.MondayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                    }
+                                    @if (row.TuesdayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
+                                    }
+                                    @if (row.WednesdayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                    }
+                                    @if (row.ThursdayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
+                                    }
+                                    @if (row.FridayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                    }
+                                    @if (row.SaturdayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
+                                    }
+                                    @if (row.SundayId == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                    }
                                 </tr>
                             }
                             else
                             {
                                 <tr>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">@row.FirstName</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
-                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                    <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
                                 </tr>
                             }
                         }

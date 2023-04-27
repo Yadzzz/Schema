@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Serilog;
 
 namespace Schema.Services
 {
     public class UserDataService
     {
+        //[Inject]
+        private Microsoft.Extensions.Logging.ILogger _logger { get; set; }
+
         public string? Username { get; set; }
         private DataAccessLibrary.Models.User? user;
         private List<DataAccessLibrary.Models.Schedule>? bookings;
@@ -18,18 +23,31 @@ namespace Schema.Services
             this.usersService = _usersService;
             this.bookingsService = _bookingsService;
             this.authStateProvider = auth;
+
+            var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => builder.AddSerilog());
+            var logger = loggerFactory.CreateLogger(string.Empty);
+            this._logger = logger;
         }
 
         public async Task InitializeUserData(string? username)
         {
             if (string.IsNullOrEmpty(username))
             {
-                var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
-                var state = await loggedInUser.GetAuthenticationStateAsync();
-                username = state?.User?.Identity?.Name ?? "";
-
-                if (string.IsNullOrEmpty(username))
+                try
                 {
+                    var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
+                    var state = await loggedInUser.GetAuthenticationStateAsync();
+                    username = state?.User?.Identity?.Name ?? "";
+
+                    if (string.IsNullOrEmpty(username))
+                    {
+                        return;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    await Console.Out.WriteLineAsync("Kunde inte InitializeUserData");
+                    this._logger.LogError(ex.ToString());
                     return;
                 }
             }

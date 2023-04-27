@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.IdentityModel.Tokens;
 using Schema.Authentication;
 using Schema.Models;
+using Serilog;
 
 namespace Schema.Services
 {
     public class SessionService
     {
+        private Microsoft.Extensions.Logging.ILogger _logger { get; set; }
+
         private string? username { get; set; }
         private string? password { get; set; }
 
@@ -17,6 +20,10 @@ namespace Schema.Services
         public SessionService(ProtectedSessionStorage _storage)
         {
             this.storage = _storage;
+
+            var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => builder.AddSerilog());
+            var logger = loggerFactory.CreateLogger(string.Empty);
+            this._logger = logger;
         }
 
         private async Task CheckUserCredentials()
@@ -26,16 +33,26 @@ namespace Schema.Services
                 return;
             }
 
-            var result = await storage.GetAsync<string>("[{$USERNAME}]");
-            if (result.Success)
+            try
             {
-                this.username = result.Value;
-            }
+                var result = await storage.GetAsync<string>("[{$USERNAME}]");
+                if (result.Success)
+                {
+                    this.username = result.Value;
+                }
 
-            var resultPass = await storage.GetAsync<string>("[{$PASSWORD}]");
-            if (resultPass.Success)
+                var resultPass = await storage.GetAsync<string>("[{$PASSWORD}]");
+                if (resultPass.Success)
+                {
+                    this.password = resultPass.Value;
+                }
+            }
+            catch(Exception ex)
             {
-                this.password = resultPass.Value;
+                this._logger.LogError(ex.ToString());
+
+                this.username = "";
+                this.password = "";
             }
         }
 

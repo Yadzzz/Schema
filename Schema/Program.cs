@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Schema.Authentication;
 using Schema.Calendar;
 using Schema.Services;
+using Serilog;
 
 namespace Schema
 {
@@ -31,6 +32,21 @@ namespace Schema
             builder.Services.AddScoped<UserDataService>();
             builder.Services.AddTransient<AvailabilityService>();
             builder.Services.AddScoped<NotificationService>();
+
+            builder.Services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(365);
+            });
+
+            Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.File(@"logs/log.txt", shared: true)
+            .CreateLogger();
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddSerilog();
 
             var app = builder.Build();
 

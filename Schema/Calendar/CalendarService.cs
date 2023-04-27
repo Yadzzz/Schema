@@ -94,6 +94,51 @@
                     }
                 }
 
+                //foreach (var date in dates)
+                //{
+                //    var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).ToList();
+
+                //    if (scheduledDateForUser == null)
+                //    {
+                //        continue;
+                //    }
+
+                //    foreach (var schedule in scheduledDateForUser)
+                //    {
+                //        switch (date.DayOfWeek)
+                //        {
+                //            case DayOfWeek.Monday:
+                //                monday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                mondayId = schedule.Id;
+                //                break;
+                //            case DayOfWeek.Tuesday:
+                //                tuesday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                tuesdayId = schedule.Id;
+                //                break;
+                //            case DayOfWeek.Wednesday:
+                //                wednesday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                wednesdayId = schedule.Id;
+                //                break;
+                //            case DayOfWeek.Thursday:
+                //                thursday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                thursdayId = schedule.Id;
+                //                break;
+                //            case DayOfWeek.Friday:
+                //                friday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                fridayId = schedule.Id;
+                //                break;
+                //            case DayOfWeek.Saturday:
+                //                saturday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                saturdayId = schedule.Id;
+                //                break;
+                //            case DayOfWeek.Sunday:
+                //                sunday += schedule?.TimeStart + "-" + schedule?.TimeEnd + " ";
+                //                sundayId = schedule.Id;
+                //                break;
+                //        }
+                //    }
+                //}
+
                 //rows.Add(new CalendarRow(firstName, monday, tuesday, wednesday, thursday, friday, saturday, sunday));
                 rows.Add(new CalendarRow(firstName, mondayId, monday, tuesdayId, tuesday, wednesdayId, wednesday, thursdayId, thursday, fridayId, friday, saturdayId, saturday, sundayId, sunday));
             }

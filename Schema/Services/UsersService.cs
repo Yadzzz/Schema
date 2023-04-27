@@ -1,14 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Schema.Services
 {
     public class UsersService
     {
+        private Microsoft.Extensions.Logging.ILogger _logger { get; set; }
         private readonly DataAccessLibrary.Context.BevakningContext _bevakningContext;
 
         public UsersService(DataAccessLibrary.Context.BevakningContext bevakningContext)
         {
             this._bevakningContext = bevakningContext;
+
+            var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => builder.AddSerilog());
+            var logger = loggerFactory.CreateLogger(string.Empty);
+            this._logger = logger;
         }
 
         public async Task<List<DataAccessLibrary.Models.User>?> GetUsers()
@@ -23,6 +29,7 @@ namespace Schema.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                this._logger.LogError(ex.ToString());
                 return null;
             }
         }
@@ -39,6 +46,7 @@ namespace Schema.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                this._logger.LogError(ex.ToString());
                 return null;
             }
         }
@@ -56,6 +64,7 @@ namespace Schema.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                this._logger.LogError(ex.ToString());
                 return false;
             }
         }
@@ -73,6 +82,7 @@ namespace Schema.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                this._logger.LogError(ex.ToString());
                 return false;
             }
         }
@@ -90,6 +100,7 @@ namespace Schema.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                this._logger.LogError(ex.ToString());
                 return false;
             }
         }
