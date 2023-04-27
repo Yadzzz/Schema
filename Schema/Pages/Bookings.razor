@@ -197,8 +197,12 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label for="usernameInput">Arbetsplats</label>
-                                        <input id="usernameInput" type="text" class="form-control" placeholder="e.g Push" @bind-value="this._selectedSchedule.JobPlace" @bind-value:event="oninput">
+                                        <label for="arbetsplatsInput">Arbetsplats</label>
+                                        <input id="arbetsplatsInput" type="text" class="form-control" placeholder="e.g Push" @bind-value="this._selectedSchedule.JobPlace" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="commentInput">Kommentar</label>
+                                        <input id="commentInput" type="text" class="form-control" placeholder="Kommentar" @bind-value="this._selectedSchedule.Comment" @bind-value:event="oninput">
                                     </div>
                                 </div>
 
@@ -384,7 +388,14 @@
     private async Task GetBookings()
     {
         if (this._bookings == null || this._bookings.Count == 0)
+        {
             this._bookings = await this.BookingsService.GetBookings();
+
+            if (this._bookings?.Count == 0)
+            {
+                await this.NotificationService.AlertError("Finns inga aktiva bokningar!");
+            }
+        }
 
         this._selectedSchedule = null;
         this._showLatestBookings = true;

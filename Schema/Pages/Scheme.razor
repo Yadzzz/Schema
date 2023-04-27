@@ -158,13 +158,13 @@
                             {
                                 <tr>
                                     <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
-                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@((MarkupString)row.Monday)</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
+                                    <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
                                 </tr>
                             }
                         }
@@ -285,6 +285,29 @@
         DialogIsOpen = true;
     }
 
+    private async Task OpenDialog(Calendar.CalendarRow calendarRow, List<int> ids)
+    {
+        foreach (var id in ids)
+        {
+            var booking = await this.BookingService.GetBooking(id);
+
+            if (booking == null)
+            {
+                continue;
+            }
+
+            caption = calendarRow.FirstName;
+            message += $"<b>Start:</b> {booking.DateStart.Value.ToShortDateString()} {booking.TimeStart}  <br />";
+            message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToShortDateString()} {booking.TimeEnd} <br />";
+            message += $"<b>Typ:</b> {booking.JobType} <br />";
+            message += $"<b>Plats:</b> {booking.JobPlace} <br />";
+            message += $"<b>Kommentar:</b> {booking.Comment} <br />";
+            message += $"<br /><br />";
+        }
+
+        DialogIsOpen = true;
+    }
+
     private async Task OnDialogClose(bool isOk)
     {
         //if (isOk)
@@ -298,6 +321,8 @@
         //}
 
         //this.dialogRef.InputText = "";
+        this.caption = "";
+        this.message = "";
         DialogIsOpen = false;
     }
 

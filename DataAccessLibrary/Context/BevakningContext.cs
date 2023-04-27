@@ -39,6 +39,7 @@ public partial class BevakningContext : DbContext
             entity.Property(e => e.TimeEnd).HasMaxLength(100);
             entity.Property(e => e.JobType).HasMaxLength(100);
             entity.Property(e => e.JobPlace).HasMaxLength(100);
+            entity.Property(e => e.Comment).HasMaxLength(100);
             entity.Property(e => e.UserId)
                 .HasMaxLength(10)
                 .IsFixedLength();

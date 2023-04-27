@@ -20,4 +20,6 @@ public partial class Schedule
     public string? JobType { get; set; }
 
     public string? JobPlace { get; set; }
+
+    public string? Comment { get; set; }
 }
