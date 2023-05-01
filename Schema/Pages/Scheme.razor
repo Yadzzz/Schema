@@ -351,11 +351,15 @@
 
     private int GetWeek(DateTime date)
     {
-        return System.Globalization.ISOWeek.GetWeekOfYear(date);   
+        return System.Globalization.ISOWeek.GetWeekOfYear(date);
     }
 
-    private void NextWeekButton()
+    private async Task NextWeekButton()
     {
+        this.isLoading = true;
+        this.StateHasChanged();
+        await Task.Delay(100);
+
         if (this._calendar != null)
         {
             DateTime currentCalendarDate = this._calendar.WeekStartDate;
@@ -367,11 +371,16 @@
             this._calendar = this.CalendarService.InitializeCalendarData(currentCalendarDate.AddDays(+7));
         }
 
+        this.isLoading = false;
         this.StateHasChanged();
     }
 
-    private void PreviousWeekButton()
+    private async Task PreviousWeekButton()
     {
+        this.isLoading = true;
+        this.StateHasChanged();
+        await Task.Delay(100);
+
         if (this._calendar != null)
         {
             DateTime currentCalendarDate = this._calendar.WeekStartDate;
@@ -383,6 +392,7 @@
             this._calendar = this.CalendarService.InitializeCalendarData(currentCalendarDate.AddDays(-7));
         }
 
+        this.isLoading = false;
         this.StateHasChanged();
     }
 }
