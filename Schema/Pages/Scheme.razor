@@ -53,7 +53,7 @@
                     @if (this._calendar != null)
                     {
                         <tr>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
+                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate)) V.@this.GetWeek(this._calendar.WeekStartDate)</div></th>
                             <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
                             <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
                             <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
@@ -90,73 +90,75 @@
             </tr>*@
                     @if (this._calendar != null && this._calendar.Rows.Count > 0)
                     {
-                        foreach (var row in this._calendar.Rows.OrderByDescending(x => x.FirstName.ToLower() == "ledigt-pass") ?? Enumerable.Empty<Calendar.CalendarRow>())
+                        foreach (var row in this._calendar.Rows.Where(x => !string.IsNullOrEmpty(x.Monday) || !string.IsNullOrEmpty(x.Tuesday) || !string.IsNullOrEmpty(x.Wednesday) ||
+                        !string.IsNullOrEmpty(x.Thursday) || !string.IsNullOrEmpty(x.Friday) || !string.IsNullOrEmpty(x.Saturday) ||
+                        !string.IsNullOrEmpty(x.Sunday)).OrderByDescending(x => x.FirstName.ToLower() == "ledigt-pass") ?? Enumerable.Empty<Calendar.CalendarRow>())
                         {
                             @if (row.FirstName.ToLower() == "ledigt-pass")
                             {
-                                <tr>
+                                <tr style="border: 1px solid #C5C5C5;">
                                     <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
-                                    @if (row.MondayId == 0)
+                                    @if (row.MondayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@row.Monday</div></td>
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@row.Monday</div></td>
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@((MarkupString)row.Monday)</div></td>
                                     }
-                                    @if (row.TuesdayId == 0)
+                                    @if (row.TuesdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
-                                    }
-                                    else
-                                    {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayId))">@row.Tuesday</div></td>
-                                    }
-                                    @if (row.WednesdayId == 0)
-                                    {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@row.Tuesday</div></td>
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayId))">@row.Wednesday</div></td>
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
                                     }
-                                    @if (row.ThursdayId == 0)
+                                    @if (row.WednesdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
-                                    }
-                                    else
-                                    {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayId))">@row.Thursday</div></td>
-                                    }
-                                    @if (row.FridayId == 0)
-                                    {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@row.Wednesday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayId))">@row.Friday</div></td>
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
                                     }
-                                    @if (row.SaturdayId == 0)
+                                    @if (row.ThursdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
-                                    }
-                                    else
-                                    {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayId))">@row.Saturday</div></td>
-                                    }
-                                    @if (row.SundayId == 0)
-                                    {
-                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@row.Thursday</div></td>
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayId))">@row.Sunday</div></td>
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
+                                    }
+                                    @if (row.FridayIds.Count == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@row.Friday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
+                                    }
+                                    @if (row.SaturdayIds.Count == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@row.Saturday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
+                                    }
+                                    @if (row.SundayIds.Count == 0)
+                                    {
+                                        <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@row.Sunday</div></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="padding:1%; background-color:#CDFFDD; color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
                                     }
                                 </tr>
                             }
                             else
                             {
-                                <tr>
+                                <tr style="border: 1px solid rgb(197, 202, 197);">
                                     <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
                                     <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@((MarkupString)row.Monday)</div></td>
                                     <td class="text-center" style="padding:1%;"><div style="max-width:100%; white-space:pre-line; font-size:8px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
@@ -277,8 +279,8 @@
         }
 
         caption = calendarRow.FirstName;
-        message = $"<b>Start:</b> {booking.DateStart.Value.ToShortDateString()} {booking.TimeStart}  <br />";
-        message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToShortDateString()} {booking.TimeEnd} <br />";
+        message = $"<b>Start:</b> {booking.DateStart.Value.ToString("yyyy-MM-dd")} {booking.TimeStart}  <br />";
+        message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToString("yyyy-MM-dd")} {booking.TimeEnd} <br />";
         message += $"<b>Typ:</b> {booking.JobType}  <br />";
         message += $"<b>Plats:</b> {booking.JobPlace}  <br />";
 
@@ -297,8 +299,8 @@
             }
 
             caption = calendarRow.FirstName;
-            message += $"<b>Start:</b> {booking.DateStart.Value.ToShortDateString()} {booking.TimeStart}  <br />";
-            message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToShortDateString()} {booking.TimeEnd} <br />";
+            message += $"<b>Start:</b> {booking.DateStart.Value.ToString("yyyy-MM-dd")} {booking.TimeStart}  <br />";
+            message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToString("yyyy-MM-dd")} {booking.TimeEnd} <br />";
             message += $"<b>Typ:</b> {booking.JobType} <br />";
             message += $"<b>Plats:</b> {booking.JobPlace} <br />";
             message += $"<b>Kommentar:</b> {booking.Comment} <br />";
@@ -345,6 +347,11 @@
         string month = date.ToString("MMMM");
 
         return char.ToUpper(month[0]) + month.Substring(1);
+    }
+
+    private int GetWeek(DateTime date)
+    {
+        return System.Globalization.ISOWeek.GetWeekOfYear(date);   
     }
 
     private void NextWeekButton()
