@@ -4,19 +4,20 @@
 @inject Calendar.CalendarService CalendarService
 @inject Services.PageNavigationService PageNavService
 @inject Services.BookingsService BookingService
+@inject AuthenticationStateProvider authStateProvider
 
 <div class="row layout-top-spacing">
 
     @*<div class="table-responsive">
-    <div class="col-xl-12" style="float:left">
-    <div class="col-sm-12">
-    <div class="custom-control custom-checkbox checkbox-info">
-    <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
-    <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
-    </div>
-    </div>
-    </div>
-    </div>*@
+        <div class="col-xl-12" style="float:left">
+        <div class="col-sm-12">
+        <div class="custom-control custom-checkbox checkbox-info">
+        <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
+        <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
+        </div>
+        </div>
+        </div>
+        </div>*@
 
     <div class="row layout-top-spacing" />
 
@@ -40,7 +41,7 @@
             @if (this._calendar != null)
             {
                 <h5>V.@this.GetWeek(this._calendar.WeekStartDate)</h5>
-              }
+            }
         </div>
 
         <div class="d-grid gap-2 col-1 mx-auto">
@@ -60,14 +61,14 @@
                     @if (this._calendar != null)
                     {
                         <tr>
-                            <th scope="col"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
-                            <th class="text-center" scope="col"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
+                            <th scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:10px;">@(this.GetMonth(this._calendar.WeekStartDate))</div></th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.Day</div>M</th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(1).Day</div>T</th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(2).Day</div>O</th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(3).Day</div>T</th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(4).Day</div>F</th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(5).Day</div>L</th>
+                            <th class="text-center" scope="col" style="color:black;"><div style="max-width:100%; white-space:pre-line; font-size:8px;">@this._calendar.WeekStartDate.AddDays(6).Day</div>S</th>
                         </tr>
                     }
                     else
@@ -86,15 +87,15 @@
                 </thead>
                 <tbody>
                     @*<tr>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-            </tr>*@
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+                        </tr>*@
                     @if (this._calendar != null && this._calendar.Rows.Count > 0)
                     {
                         foreach (var row in this._calendar.Rows.Where(x => !string.IsNullOrEmpty(x.Monday) || !string.IsNullOrEmpty(x.Tuesday) || !string.IsNullOrEmpty(x.Wednesday) ||
@@ -104,14 +105,14 @@
                             @if (row.FirstName.ToLower() == "ledigt-pass")
                             {
                                 <tr style="border: 1px solid #C5C5C5;">
-                                    <td style="padding:0.5%;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
+                                    <td style="padding:0.5%; color:black;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
                                     @if (row.MondayIds.Count == 0)
                                     {
                                         <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@row.Monday</div></td>
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@((MarkupString)row.Monday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@((MarkupString)row.Monday)</div></td>
                                     }
                                     @if (row.TuesdayIds.Count == 0)
                                     {
@@ -119,7 +120,7 @@
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
                                     }
                                     @if (row.WednesdayIds.Count == 0)
                                     {
@@ -127,7 +128,7 @@
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
                                     }
                                     @if (row.ThursdayIds.Count == 0)
                                     {
@@ -135,7 +136,7 @@
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
                                     }
                                     @if (row.FridayIds.Count == 0)
                                     {
@@ -151,7 +152,7 @@
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
                                     }
                                     @if (row.SundayIds.Count == 0)
                                     {
@@ -159,21 +160,21 @@
                                     }
                                     else
                                     {
-                                        <td style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
                                     }
                                 </tr>
                             }
                             else
                             {
                                 <tr style="border: 1px solid rgb(197, 202, 197);">
-                                    <td style="padding:0.5%;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@((MarkupString)row.Monday)</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
+                                    <td style="padding: 0.5%; color: black;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:8px;">@row.FirstName</div></td>
+                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197); color:black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@((MarkupString)row.Monday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
                                 </tr>
                             }
                         }
@@ -243,11 +244,11 @@
 @if (DialogIsOpen)
 {
     <DialogModal Caption=@caption
-             Message="@message"
-             OnClose="@OnDialogClose"
-             Type="DialogModal.Category.Okay"
-             TakesInput="false"
-             @ref="dialogRef">
+                 Message="@message"
+                 OnClose="@OnDialogClose"
+                 Type="DialogModal.Category.Okay"
+                 TakesInput="false"
+                 @ref="dialogRef">
     </DialogModal>
 }
 
@@ -261,6 +262,8 @@
     private string? message;
     private bool DialogIsOpen = false;
 
+    private AuthenticationState? _authState;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -268,6 +271,9 @@
             this.PageNavService.UpdateActivePage("Scheme");
 
             //var authState = await this._authenticationState;
+            var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
+            var state = await loggedInUser.GetAuthenticationStateAsync();
+            this._authState = state;
 
             await JS.InvokeVoidAsync("OnScrollEvent");
             this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
@@ -278,6 +284,9 @@
 
     private async Task OpenDialog(Calendar.CalendarRow calendarRow, int bookingId)
     {
+        this.caption = "";
+        this.message = "";
+
         var booking = await this.BookingService.GetBooking(bookingId);
 
         if (booking == null)
@@ -296,6 +305,19 @@
 
     private async Task OpenDialog(Calendar.CalendarRow calendarRow, List<int> ids)
     {
+        this.caption = "";
+        this.message = "";
+
+        bool isAdmin = false;
+        if (this._authState != null)
+        {
+            isAdmin = this._authState.User.IsInRole("Administrator");
+        }
+        else
+        {
+            isAdmin = false;
+        }
+
         foreach (var id in ids)
         {
             var booking = await this.BookingService.GetBooking(id);
@@ -311,31 +333,10 @@
             message += $"<b>Typ:</b> {booking.JobType} <br />";
             message += $"<b>Plats:</b> {booking.JobPlace} <br />";
             message += $"<b>Kommentar:</b> {booking.Comment} <br />";
-            message += $"<br /><a class='btn btn-primary' href='/bookings/{booking.Id}' style='height:35px; width:100%;'>Redigera</button><hr />";
-            message += $"<br /><br />";
-        }
-
-        DialogIsOpen = true;
-    }
-
-    private async Task OpenDialogAdmin(Calendar.CalendarRow calendarRow, List<int> ids)
-    {
-        foreach (var id in ids)
-        {
-            var booking = await this.BookingService.GetBooking(id);
-
-            if (booking == null)
+            if (isAdmin)
             {
-                continue;
+                message += $"<br /><a class='btn btn-primary' href='/bookings/{booking.Id}' style='height:35px; width:100%;'>Redigera</a><hr />";
             }
-
-            caption = calendarRow.FirstName;
-            message += $"<b>Start:</b> {booking.DateStart.Value.ToString("yyyy-MM-dd")} {booking.TimeStart}  <br />";
-            message += $"<b>Avslut:</b> {booking.DateEnd.Value.ToString("yyyy-MM-dd")} {booking.TimeEnd} <br />";
-            message += $"<b>Typ:</b> {booking.JobType} <br />";
-            message += $"<b>Plats:</b> {booking.JobPlace} <br />";
-            message += $"<b>Kommentar:</b> {booking.Comment} <br />";
-            message += $"<button type='button' class='btn btn-primary' href='/bookings/{booking.Id}'>Redigera</button>";
             message += $"<br /><br />";
         }
 
