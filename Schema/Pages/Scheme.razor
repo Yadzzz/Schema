@@ -105,76 +105,76 @@
                             @if (row.FirstName.ToLower() == "ledigt-pass")
                             {
                                 <tr style="border: 1px solid #C5C5C5;">
-                                    <td style="padding:0.5%; color:black;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:8px; font-weight: bold;">@row.FirstName</div></td>
+                                    <td style="padding:0.5%; color:black;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;">@row.FirstName</div></td>
                                     @if (row.MondayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@row.Monday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@row.Monday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@((MarkupString)row.Monday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.MondayId))">@((MarkupString)row.Monday)</div></td>
                                     }
                                     @if (row.TuesdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@row.Tuesday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@row.Tuesday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
                                     }
                                     @if (row.WednesdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@row.Wednesday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@row.Wednesday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
                                     }
                                     @if (row.ThursdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@row.Thursday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@row.Thursday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
                                     }
                                     @if (row.FridayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@row.Friday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@row.Friday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
                                     }
                                     @if (row.SaturdayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@row.Saturday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@row.Saturday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
                                     }
                                     @if (row.SundayIds.Count == 0)
                                     {
-                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@row.Sunday</div></td>
+                                        <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@row.Sunday</div></td>
                                     }
                                     else
                                     {
-                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
+                                        <td class="text-center" style="padding:1%; background-color:#CDFFDD; color:black; border: 1px solid rgb(197, 202, 197);"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
                                     }
                                 </tr>
                             }
                             else
                             {
                                 <tr style="border: 1px solid rgb(197, 202, 197);">
-                                    <td style="padding: 0.5%; color: black;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;">@row.FirstName</div></td>
-                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197); color:black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@((MarkupString)row.Monday)</div></td>
-                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
-                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
-                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
-                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
-                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
-                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:9px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
+                                    <td style="padding: 0.5%; color: black;"><div style="padding:0.5%; overflow:hidden; max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;">@row.FirstName</div></td>
+                                    <td class="text-center" style="padding:1%; border: 1px solid rgb(197, 202, 197); color:black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.MondayIds))">@((MarkupString)row.Monday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.TuesdayIds))">@((MarkupString)row.Tuesday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.WednesdayIds))">@((MarkupString)row.Wednesday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.ThursdayIds))">@((MarkupString)row.Thursday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.FridayIds))">@((MarkupString)row.Friday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SaturdayIds))">@((MarkupString)row.Saturday)</div></td>
+                                    <td class="text-center" style="padding: 1%; border: 1px solid rgb(197, 202, 197); color: black;"><div style="max-width:100%; white-space:pre-line; font-size:10px; font-weight: bold;" @onclick="(() => this.OpenDialog(row, row.SundayIds))">@((MarkupString)row.Sunday)</div></td>
                                 </tr>
                             }
                         }
