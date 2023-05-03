@@ -9,7 +9,7 @@
             this._bevakningContext = bevakningContext;
         }
 
-        public async Task<bool> DoesRequestExistsForBooking(int userId, int bookingId)
+        public bool DoesRequestExistsForBooking(int userId, int bookingId)
         {
             if (this._bevakningContext == null || this._bevakningContext.ScheduleRequests == null)
             {

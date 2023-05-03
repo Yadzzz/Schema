@@ -51,6 +51,23 @@ namespace Schema.Services
             }
         }
 
+        public DataAccessLibrary.Models.User? GetUser(int userId)
+        {
+            if (this._bevakningContext == null || this._bevakningContext.Users == null)
+                return null;
+
+            try
+            {
+                return this._bevakningContext.Users.Find(userId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                this._logger.LogError(ex.ToString());
+                return null;
+            }
+        }
+
         public async Task<bool> UpdateUser(DataAccessLibrary.Models.User user)
         {
             if (user == null || this._bevakningContext == null) return false;

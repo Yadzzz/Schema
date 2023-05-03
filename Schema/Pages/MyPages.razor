@@ -59,7 +59,7 @@
                             </div>
 
                             <div class="form-group mb-4">
-                            @*<div class="col-sm-6">*@
+                                @*<div class="col-sm-6">*@
                                 <label for="searchbookingsbutton">Visa Pass</label>
                                 <button id="searchbookingsbutton" type="button" class="btn btn-primary" @onclick="this.CalculateMonths">Visa</button>
                             </div>
@@ -180,7 +180,7 @@
             </div>
         </div>
 
-        @if (this._bookings != null)
+        @if (this._bookings != null && !this.isLoading)
         {
             <div id="flAutoSizing" class="col-lg-12 layout-spacing">
                 <div class="statbox widget box box-shadow">
@@ -197,6 +197,32 @@
                             <div class="d-grid gap-2 col-12 mx-auto">
 
                                 <div class="table-responsive">
+                                    @if (this._monthlySpecificationUpcoming != null)
+                                    {
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Antal Pass</th>
+                                                    <th scope="col">Antal Timmar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        @(
+                                                            this._monthlySpecificationUpcoming.Days
+                                                            )
+                                                    </td>
+                                                    <td>
+                                                        @(
+                                                            this._monthlySpecificationUpcoming.Hours
+                                                            )
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    }
+
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -207,7 +233,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var booking in this._bookings.OrderByDescending(x => x.DateStart))
+                                            @foreach (var booking in this._bookings.OrderBy(x => x.DateStart))
                                             {
                                                 <tr>
                                                     <td>@(booking?.DateStart?.ToString("yyyy-MM-dd") + " - " + booking?.DateEnd?.ToString("yyyy-MM-dd"))</td>
@@ -239,6 +265,8 @@
     private int yearInput = 2023;
     private int monthInput = 0;
 
+    private MonthlySpecification? _monthlySpecificationUpcoming;
+
     protected override async Task OnInitializedAsync()
     {
         //var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
@@ -248,7 +276,7 @@
         await this.UserDataService.LoadData();
         this._bookings = this.UserDataService.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days > 0).ToList();
 
-        //await this.CalculateMonths();
+        await this.CalculateMonthsUpcoming();
 
         this.PageNavService.UpdateActivePage("MyPages");
         this.isLoading = false;
@@ -268,6 +296,54 @@
     {
         int inputValue = int.Parse(e?.Value?.ToString());
         this.monthInput = inputValue;
+    }
+
+    private async Task CalculateMonthsUpcoming()
+    {
+        this.isLoading = true;
+        this.StateHasChanged();
+
+        this._monthlySpecificationUpcoming = null;
+
+        int month = this.monthInput;
+        int days = 0;
+        double hours = 0;
+
+        var totalBookings = this.UserDataService?.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days > 0).ToList();
+
+        List<DataAccessLibrary.Models.Schedule> bookingsToRemove = new();
+
+        foreach (var booking in totalBookings)
+        {
+            if (booking.DateStart == null || booking.DateEnd == null || booking.TimeStart == null || booking.TimeEnd == null ||
+                booking.TimeStart.Length != 5 || booking.TimeEnd.Length != 5 || !booking.TimeStart.Contains(":") || !booking.TimeEnd.Contains(":"))
+            {
+                continue;
+            }
+
+            string[] timeStart = booking.TimeStart.Split(":");
+            DateTime start = new DateTime(booking.DateStart.Value.Year, booking.DateStart.Value.Month, booking.DateStart.Value.Day,
+                                        int.Parse(timeStart[0]), int.Parse(timeStart[1]), 0);
+
+            string[] timeEnd = booking.TimeEnd.Split(":");
+            DateTime end = new DateTime(booking.DateEnd.Value.Year, booking.DateEnd.Value.Month, booking.DateEnd.Value.Day,
+                                        int.Parse(timeEnd[0]), int.Parse(timeEnd[1]), 0);
+
+            hours += (end - start).TotalHours;
+        }
+
+        days = totalBookings.Count();
+
+        this._monthlySpecificationUpcoming = new MonthlySpecification()
+            {
+                Month = month,
+                Days = days,
+                Hours = hours,
+                Bookings = totalBookings.ToList()
+            };
+
+        this.isLoading = false;
+        this.StateHasChanged();
     }
 
     private async Task CalculateMonths()
@@ -299,7 +375,7 @@
 
             var totalBookings = this.UserDataService?.Bookings?.Where(x => x?.DateStart?.Year == this.yearInput && x?.DateStart?.Month == this.monthInput).ToList();
 
-            if (totalBookings == null|| totalBookings.Count == 0)
+            if (totalBookings == null || totalBookings.Count == 0)
             {
                 await this.NotificationService.AlertError("Inga bokningar hittades!");
                 this.isLoading = false;
@@ -335,7 +411,7 @@
                 hours += (end - start).TotalHours;
             }
 
-            foreach(var booking in bookingsToRemove)
+            foreach (var booking in bookingsToRemove)
             {
                 totalBookings.Remove(booking);
             }

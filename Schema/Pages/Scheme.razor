@@ -5,19 +5,21 @@
 @inject Services.PageNavigationService PageNavService
 @inject Services.BookingsService BookingService
 @inject AuthenticationStateProvider authStateProvider
+@inject Services.BookingRequestsService BookingRequestsService
+@*@inject Services.UserDataService UserDataService*@
 
 <div class="row layout-top-spacing">
 
     @*<div class="table-responsive">
-        <div class="col-xl-12" style="float:left">
-        <div class="col-sm-12">
-        <div class="custom-control custom-checkbox checkbox-info">
-        <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
-        <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
-        </div>
-        </div>
-        </div>
-        </div>*@
+    <div class="col-xl-12" style="float:left">
+    <div class="col-sm-12">
+    <div class="custom-control custom-checkbox checkbox-info">
+    <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
+    <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
+    </div>
+    </div>
+    </div>
+    </div>*@
 
     <div class="row layout-top-spacing" />
 
@@ -87,15 +89,15 @@
                 </thead>
                 <tbody>
                     @*<tr>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        </tr>*@
+            <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            </tr>*@
                     @if (this._calendar != null && this._calendar.Rows.Count > 0)
                     {
                         foreach (var row in this._calendar.Rows.Where(x => !string.IsNullOrEmpty(x.Monday) || !string.IsNullOrEmpty(x.Tuesday) || !string.IsNullOrEmpty(x.Wednesday) ||
@@ -244,11 +246,13 @@
 @if (DialogIsOpen)
 {
     <DialogModal Caption=@caption
-                 Message="@message"
-                 OnClose="@OnDialogClose"
-                 Type="DialogModal.Category.Okay"
-                 TakesInput="false"
-                 @ref="dialogRef">
+             Message="@message"
+             OnClose="@OnDialogClose"
+             Type="DialogModal.Category.Okay"
+             TakesInput="false"
+             Bookings="this._selectedBookings"
+             isAdmin="this.isAdmin"
+             @ref="dialogRef">
     </DialogModal>
 }
 
@@ -261,6 +265,8 @@
     private string? caption;
     private string? message;
     private bool DialogIsOpen = false;
+    private List<DataAccessLibrary.Models.Schedule>? _selectedBookings;
+    private bool isAdmin = false;
 
     private AuthenticationState? _authState;
 
@@ -274,6 +280,17 @@
             var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
             var state = await loggedInUser.GetAuthenticationStateAsync();
             this._authState = state;
+
+            if (this._authState != null)
+            {
+                this.isAdmin = this._authState.User.IsInRole("Administrator");
+            }
+            else
+            {
+                this.isAdmin = false;
+            }
+
+            //await this.UserDataService.LoadData();
 
             await JS.InvokeVoidAsync("OnScrollEvent");
             this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
@@ -308,15 +325,55 @@
         this.caption = "";
         this.message = "";
 
-        bool isAdmin = false;
-        if (this._authState != null)
-        {
-            isAdmin = this._authState.User.IsInRole("Administrator");
-        }
-        else
-        {
-            isAdmin = false;
-        }
+        //bool isAdmin = false;
+        //if (this._authState != null)
+        //{
+        //    isAdmin = this._authState.User.IsInRole("Administrator");
+        //}
+        //else
+        //{
+        //    isAdmin = false;
+        //}
+
+        //foreach (var id in ids)
+        //{
+        //    var booking = await this.BookingService.GetBooking(id);
+
+        //    if (booking == null)
+        //    {
+        //        continue;
+        //    }
+
+        //    string[] timeStart = booking.TimeStart.Split(":");
+        //    DateTime start = new DateTime(booking.DateStart.Value.Year, booking.DateStart.Value.Month, booking.DateStart.Value.Day,
+        //                                int.Parse(timeStart[0]), int.Parse(timeStart[1]), 0);
+
+        //    string[] timeEnd = booking.TimeEnd.Split(":");
+        //    DateTime end = new DateTime(booking.DateEnd.Value.Year, booking.DateEnd.Value.Month, booking.DateEnd.Value.Day,
+        //                                int.Parse(timeEnd[0]), int.Parse(timeEnd[1]), 0);
+
+        //    caption = calendarRow.FirstName;
+        //    message += $"<b>Start:</b> {booking?.DateStart.Value.ToString("yyyy-MM-dd")} {booking?.TimeStart}  <br />";
+        //    message += $"<b>Avslut:</b> {booking?.DateEnd.Value.ToString("yyyy-MM-dd")} {booking?.TimeEnd} <br />";
+        //    message += $"<b>Antal Timmar:</b> {(end - start).TotalHours} <br />";
+        //    message += $"<b>Typ:</b> {booking.JobType} <br />";
+        //    message += $"<b>Plats:</b> {booking.JobPlace} <br />";
+        //    message += $"<b>Kommentar:</b> {booking.Comment} <br />";
+        //    if(!this.BookingRequestsService.DoesRequestExistsForBooking(this.UserDataService.User.Id, booking.Id))
+        //    {
+        //        message += $"<br /><a class='btn btn-primary' href='/bookings/{booking.Id}' style='height:35px; width:100%;'>Redigera</a>";
+        //    }
+
+        //    if (isAdmin)
+        //    {
+        //        message += $"<br /><a class='btn btn-primary' href='/bookings/{booking.Id}' style='height:35px; width:100%;'>Redigera</a><hr />";
+        //    }
+        //    message += $"<br /><br />";
+        //}
+
+        caption = calendarRow.FirstName;
+
+        this._selectedBookings = new();
 
         foreach (var id in ids)
         {
@@ -327,20 +384,11 @@
                 continue;
             }
 
-            caption = calendarRow.FirstName;
-            message += $"<b>Start:</b> {booking?.DateStart.Value.ToString("yyyy-MM-dd")} {booking?.TimeStart}  <br />";
-            message += $"<b>Avslut:</b> {booking?.DateEnd.Value.ToString("yyyy-MM-dd")} {booking?.TimeEnd} <br />";
-            message += $"<b>Typ:</b> {booking.JobType} <br />";
-            message += $"<b>Plats:</b> {booking.JobPlace} <br />";
-            message += $"<b>Kommentar:</b> {booking.Comment} <br />";
-            if (isAdmin)
-            {
-                message += $"<br /><a class='btn btn-primary' href='/bookings/{booking.Id}' style='height:35px; width:100%;'>Redigera</a><hr />";
-            }
-            message += $"<br /><br />";
+            this._selectedBookings.Add(booking);
         }
 
         DialogIsOpen = true;
+        this.dialogRef?.UpdateState();
     }
 
     private async Task OnDialogClose(bool isOk)

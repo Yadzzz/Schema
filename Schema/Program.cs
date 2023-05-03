@@ -25,13 +25,14 @@ namespace Schema
             builder.Services.AddScoped<PageNavigationService>();
             builder.Services.AddTransient<CalendarService>();
             //builder.Services.AddTransient<BevakningContext>();
-            builder.Services.AddDbContext<BevakningContext>(ServiceLifetime.Scoped);
+            builder.Services.AddDbContext<BevakningContext>(ServiceLifetime.Transient);
             builder.Services.AddTransient<UsersService>();
             builder.Services.AddTransient<BookingsService>();
             //builder.Services.AddTransient<SessionService>();
             builder.Services.AddScoped<UserDataService>();
             builder.Services.AddTransient<AvailabilityService>();
-            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddTransient<NotificationService>();
+            builder.Services.AddTransient<BookingRequestsService>();
 
             builder.Services.AddHsts(options =>
             {

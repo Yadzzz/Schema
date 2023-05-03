@@ -1,4 +1,11 @@
-﻿<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+﻿@inject Services.BookingsService BookingService
+@inject AuthenticationStateProvider authStateProvider
+@inject Services.BookingRequestsService BookingRequestsService
+@inject Services.UserDataService UserDataService
+@inject Services.UsersService UsersService
+@inject NavigationManager NavManager
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,12 +16,56 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>@((MarkupString)Message)</p>
+                @*<p>@((MarkupString)Message)</p>*@
 
                 @if (this.TakesInput)
                 {
                     <input type="text" class="form-control form-control-sm" placeholder="Notering" @bind-value=@this.InputText />
                 }
+
+                @if (this.isLoading)
+                {
+                    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @if (this.Bookings != null && this.Bookings.Count > 0)
+                    {
+                        @foreach (var booking in this.Bookings)
+                        {
+                            <b>Start: </b> @(booking?.DateStart.Value.ToString("yyyy-MM-dd") + " " + booking?.TimeStart)  <br />
+                            <b>Avslut: </b> @(booking?.DateEnd.Value.ToString("yyyy-MM-dd") + " " + booking?.TimeEnd) <br />
+                            <b>Antal Timmar: </b> @(this.GetTotalHours(booking)) <br />
+                            <b>Typ: </b> @booking.JobType <br />
+                            <b>Plats: </b> @booking.JobPlace <br />
+                            <b>Kommentar: </b> @booking.Comment <br />
+
+                            @if (this.IsAvailableBooking(booking.UserId) && !this.DoesBookingRequestExist(booking.Id))
+                            {
+                                <br />
+
+                                <a class='btn btn-primary' style='height:35px; width:100%;' @onclick="() => this.RequestBooking(booking.Id)">Önska Pass</a>
+                                <br />
+                            }
+
+                            @if (this.isAdmin)
+                            {
+                                <br />
+
+                                <a class='btn btn-primary' style='height:35px; width:100%;' @onclick="() => this.OnEdit(booking.Id)">Redigera</a>
+                                <hr />
+                            }
+                            <br />
+                            <br />
+                        }
+                    }
+                }
+
+
             </div>
             <div class="modal-footer">
                 @switch (Type)
@@ -59,6 +110,85 @@
     [Parameter] public bool TakesInput { get; set; }
     public string InputText { get; set; } = string.Empty;
 
+    [Parameter] public bool isAdmin { get; set; }
+    [Parameter] public List<DataAccessLibrary.Models.Schedule> Bookings { get; set; }
+
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //var loggedInUser = (Authentication.CustomAuthenticationStateProvider)authStateProvider;
+        //var state = await loggedInUser.GetAuthenticationStateAsync();
+
+        //if (state != null)
+        //{
+        //    isAdmin = state.User.IsInRole("Administrator");
+        //}
+        //else
+        //{
+        //    isAdmin = false;
+        //}
+
+        //this._bookings = new();
+
+        //foreach (var id in this.Ids)
+        //{
+        //    var booking = await this.BookingService.GetBooking(id);
+
+        //    if (booking == null)
+        //    {
+        //        continue;
+        //    }
+
+        //    this._bookings.Add(booking);
+        //}
+
+        await this.UserDataService.LoadData();
+        this.isLoading = false;
+        this.StateHasChanged();
+    }
+
+    private void OnEdit(int bookingId)
+    {
+        this.NavManager.NavigateTo("/bookings/" + bookingId);
+    }
+
+    private double GetTotalHours(DataAccessLibrary.Models.Schedule booking)
+    {
+        string[] timeStart = booking.TimeStart.Split(":");
+        DateTime start = new DateTime(booking.DateStart.Value.Year, booking.DateStart.Value.Month, booking.DateStart.Value.Day,
+                                    int.Parse(timeStart[0]), int.Parse(timeStart[1]), 0);
+
+        string[] timeEnd = booking.TimeEnd.Split(":");
+        DateTime end = new DateTime(booking.DateEnd.Value.Year, booking.DateEnd.Value.Month, booking.DateEnd.Value.Day,
+                                    int.Parse(timeEnd[0]), int.Parse(timeEnd[1]), 0);
+
+        return (end - start).TotalHours;
+    }
+
+    private bool IsAvailableBooking(int userId)
+    {
+        var user = this.UsersService.GetUser(userId);
+
+        if (user?.FirstName?.ToLower() == "ledigt-pass")
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool DoesBookingRequestExist(int bookingId)
+    {
+        return this.BookingRequestsService.DoesRequestExistsForBooking(this.UserDataService.User.Id, bookingId);
+    }
+
+    private async Task RequestBooking(int bookingId)
+    {
+        await this.BookingRequestsService.AddBookingRequest(this.UserDataService.User.Id, bookingId);
+        this.StateHasChanged();
+    }
+
     private Task Cancel()
     {
         return OnClose.InvokeAsync(false);
@@ -74,5 +204,10 @@
         Okay,
         SaveNot,
         DeleteNot
+    }
+
+    public void UpdateState()
+    {
+        this.StateHasChanged();
     }
 }

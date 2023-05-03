@@ -4,6 +4,7 @@
 @inject NavigationManager navManager
 @inject IJSRuntime jsRuntime
 @inject Services.PageNavigationService PageNavService
+@inject Services.UserDataService UserDataService
 
 <PageTitle>Schema</PageTitle>
 
@@ -304,6 +305,7 @@
         if (currentPage != this.PageNavService.ActivePage)
         {
             this.ForceCloseSidebar();
+            //await this.UserDataService.LoadData();
         }
 
         this.currentPage = this.PageNavService.ActivePage;

@@ -53,8 +53,10 @@ namespace Schema.Services
             }
 
             this.Username = username;
+            await Console.Out.WriteLineAsync(username);
 
             this.user = await this.usersService.GetUser(username);
+            await Console.Out.WriteLineAsync(user.Id.ToString());
             if (this.user != null)
             {
                 this.bookings = await this.bookingsService.GetBookingsForUser(this.user.Id);
@@ -80,7 +82,7 @@ namespace Schema.Services
 
         public async Task LoadData()
         {
-            if(this.user == null || this.bookings == null)
+            if (this.user == null || this.bookings == null)
             {
                 await this.InitializeUserData(this.Username);
             }
