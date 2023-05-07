@@ -12,17 +12,17 @@
             return new Calendar(dates[0], dates[6], rows);
         }
 
-        public Calendar InitializeCalendarData(DateTime date, string jobType, string jobPlace)
+        public Calendar InitializeCalendarData(DateTime date, List<CalendarFilterOptions> calendarFilters)
         {
             DateManipulator dateManipulator = new(date);
             DateTime[] dates = dateManipulator.GetDatesOfweek();
 
-            List<CalendarRow> rows = this.GetCalendarRows(dates, jobType, jobPlace);
+            List<CalendarRow> rows = this.GetCalendarRows(dates, calendarFilters);
 
             return new Calendar(dates[0], dates[6], rows);
         }
 
-        private List<CalendarRow> GetCalendarRows(DateTime[] dates, string jobType = "", string jobPlace = "")
+        private List<CalendarRow> GetCalendarRows(DateTime[] dates, List<CalendarFilterOptions> calendarFilters = null)
         {
             List<CalendarRow> rows = new List<CalendarRow>();
 
@@ -193,10 +193,27 @@
 
                 foreach (var date in dates)
                 {
-                    var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date
-                                                                        && (string.IsNullOrEmpty(jobType) ? true : x.JobType.ToLower() == jobType.ToLower())
-                                                                        && (string.IsNullOrEmpty(jobPlace) ? true : x.JobPlace.ToLower() == jobPlace.ToLower())
-                                                                        ).ToList();
+                    //var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).ToList();
+
+                    //var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date
+                    //                                                    && (string.IsNullOrEmpty(jobType) ? true : x.JobType.ToLower() == jobType.ToLower())
+                    //                                                    && (string.IsNullOrEmpty(jobPlace) ? true : x.JobPlace.ToLower() == jobPlace.ToLower())
+                    //                                                    ).ToList();
+
+                    List<DataAccessLibrary.Models.Schedule> scheduledDateForUser = null;
+
+                    if (calendarFilters == null)
+                    {
+                        scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).ToList();
+                    }
+                    else
+                    {
+                        scheduledDateForUser = context.Schedules
+                                                                .Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date)
+                                                                .ToList() // switch to client-side evaluation
+                                                                .Where(x => calendarFilters.Any(y => y.JobType == x.JobType && y.JobPlace == x.JobPlace))
+                                                                .ToList();
+                    }
 
                     if (scheduledDateForUser == null)
                     {
