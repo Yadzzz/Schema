@@ -12,7 +12,17 @@
             return new Calendar(dates[0], dates[6], rows);
         }
 
-        private List<CalendarRow> GetCalendarRows(DateTime[] dates)
+        public Calendar InitializeCalendarData(DateTime date, string jobType, string jobPlace)
+        {
+            DateManipulator dateManipulator = new(date);
+            DateTime[] dates = dateManipulator.GetDatesOfweek();
+
+            List<CalendarRow> rows = this.GetCalendarRows(dates, jobType, jobPlace);
+
+            return new Calendar(dates[0], dates[6], rows);
+        }
+
+        private List<CalendarRow> GetCalendarRows(DateTime[] dates, string jobType = "", string jobPlace = "")
         {
             List<CalendarRow> rows = new List<CalendarRow>();
 
@@ -183,7 +193,10 @@
 
                 foreach (var date in dates)
                 {
-                    var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).ToList();
+                    var scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date
+                                                                        && (string.IsNullOrEmpty(jobType) ? true : x.JobType.ToLower() == jobType.ToLower())
+                                                                        && (string.IsNullOrEmpty(jobPlace) ? true : x.JobPlace.ToLower() == jobPlace.ToLower())
+                                                                        ).ToList();
 
                     if (scheduledDateForUser == null)
                     {

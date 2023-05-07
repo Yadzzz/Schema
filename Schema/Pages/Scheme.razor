@@ -33,6 +33,71 @@
     }
     else
     {
+        @if (!this.ShowFilter)
+        {
+            <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <b @onclick="this.ShowFilterTrigger">Filter</b>
+                        @*<div class="d-grid gap-2 col-12 mx-auto">
+                <button class="btn btn-outline-dark mb-4" @onclick="this.ShowFilterTrigger">Filter</button>
+                </div>*@
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-header">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <b @onclick="this.ShowFilterTrigger">Filter</b>
+                                @*<div class="d-grid gap-2 col-12 mx-auto">
+                        <button class="btn btn-outline-dark mb-4" @onclick="this.ShowFilterTrigger">Filter</button>
+                        </div>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content widget-content-area">
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label for="exampleFormControlSelect1">Jobtyp</label>
+                                <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeJobType>
+                                    <option value="">Välj Jobtyp</option>
+                                    @foreach (var job in this.jobTypes)
+                                    {
+                                        <option value="@job">@(job)</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label for="firstNameInput">Arbetsplats</label>
+                                <input id="firstNameInput" type="text" class="form-control" placeholder="Arbetsplats" aria-label="Namn" @bind-value="this.jobPlaceInput" @bind-value:event="oninput">
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label for="firstNameInput">Tillämpa Filter</label>
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-dark mb-4" @onclick="this.ApplyFilters">Tillämpa</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="firstNameInput">Rensa Filter</label>
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-dark mb-4" @onclick=this.ClearFilters>Rensa</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+
         <div class="d-grid gap-2 col-1 mx-auto">
             <button class="btn btn-outline-secondary btn-icon mb-2 me-4 btn-rounded" @onclick="this.PreviousWeekButton">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -270,6 +335,11 @@
 
     private AuthenticationState? _authState;
 
+    private bool ShowFilter = false;
+    private List<string> jobTypes;
+    private string jobTypeInput = "";
+    private string jobPlaceInput = "";
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -290,6 +360,14 @@
                 this.isAdmin = false;
             }
 
+            this.jobTypes = new()
+            {
+                "Entrevärd",
+                "Ordningsvakt",
+                "Vaktchef",
+                "Annat"
+            };
+
             //await this.UserDataService.LoadData();
 
             await JS.InvokeVoidAsync("OnScrollEvent");
@@ -297,6 +375,42 @@
             this.isLoading = false;
             this.StateHasChanged();
         }
+    }
+
+    private void OnChangeJobType(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        this.jobTypeInput = inputValue;
+    }
+
+    private void ShowFilterTrigger()
+    {
+        if (this.ShowFilter)
+        {
+            this.ShowFilter = false;
+        }
+        else
+        {
+            this.ShowFilter = true;
+        }
+    }
+
+    private void ApplyFilters()
+    {
+        this.isLoading = true;
+        this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now, this.jobTypeInput, this.jobPlaceInput);
+        this.isLoading = false;
+        this.StateHasChanged();
+    }
+
+    private void ClearFilters()
+    {
+        this.isLoading = true;
+        this.jobPlaceInput = "";
+        this.jobTypeInput = "";
+        this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
+        this.isLoading = false;
+        this.StateHasChanged();
     }
 
     private async Task OpenDialog(Calendar.CalendarRow calendarRow, int bookingId)
