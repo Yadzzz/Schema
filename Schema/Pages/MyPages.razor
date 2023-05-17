@@ -274,7 +274,7 @@
         //string username = state?.User?.Identity?.Name ?? "";
 
         await this.UserDataService.LoadData();
-        this._bookings = this.UserDataService.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days > 0).ToList();
+        this._bookings = this.UserDataService.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days >= 0).ToList();
 
         await this.CalculateMonthsUpcoming();
 
@@ -309,7 +309,7 @@
         int days = 0;
         double hours = 0;
 
-        var totalBookings = this.UserDataService?.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days > 0).ToList();
+        var totalBookings = this.UserDataService?.Bookings?.Where(x => (x.DateStart - DateTime.Now)?.Days >= 0).ToList();
 
         List<DataAccessLibrary.Models.Schedule> bookingsToRemove = new();
 
