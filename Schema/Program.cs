@@ -33,6 +33,8 @@ namespace Schema
             builder.Services.AddTransient<AvailabilityService>();
             builder.Services.AddTransient<NotificationService>();
             builder.Services.AddTransient<BookingRequestsService>();
+            builder.Services.AddTransient<EmailService>();
+            builder.Services.AddTransient<JobsService>();
 
             builder.Services.AddHsts(options =>
             {

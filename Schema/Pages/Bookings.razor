@@ -6,6 +6,7 @@
 @inject Services.UsersService UsersService
 @inject Services.BookingsService BookingsService
 @inject Services.NotificationService NotificationService
+@inject Services.JobsService JobsService
 
 <AuthorizeView Roles="Administrator" Context="usersPageContext">
     <Authorized>
@@ -197,9 +198,29 @@
                                                 }*@
                                         </select>
                                     </div>
-                                    <div class="col-sm-6">
+                                    @*<div class="col-sm-6">
                                         <label for="arbetsplatsInput">Arbetsplats</label>
                                         <input id="arbetsplatsInput" type="text" class="form-control" placeholder="e.g Push" @bind-value="this._selectedSchedule.JobPlace" @bind-value:event="oninput">
+                                    </div>*@
+                                    <div class="form-group mb-4">
+                                        <label for="exampleFormControlSelect1">Jobtyp</label>
+                                        <select class="form-select" id="exampleFormControlSelect1" @onchange="this.OnChangeJobPlace">
+                                            <option value="">Arbetsplats</option>
+                                            @if (this._jobPlaces != null && this._jobPlaces.Count > 0)
+                                            {
+                                                foreach (var job in this._jobPlaces)
+                                                {
+                                                    if (this._selectedSchedule?.JobPlace?.ToLower() == job.Name.ToLower())
+                                                    {
+                                                        <option value="@job.Name" selected>@job.Name</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@job.Name">@job.Name</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="commentInput">Kommentar</label>
@@ -235,6 +256,7 @@
     private bool _showLatestBookings = false;
 
     private List<string> jobTypes;
+    private List<DataAccessLibrary.Models.Job>? _jobPlaces;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -252,6 +274,7 @@
                 "Ledig Pass",
                 "Annat"
             };
+            this._jobPlaces = await this.JobsService.GetJobsAsync();
 
             if (this.BookingId != 0)
             {
@@ -379,6 +402,12 @@
     {
         string inputValue = e?.Value?.ToString();
         this._selectedSchedule.JobType = inputValue;
+    }
+
+    private void OnChangeJobPlace(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        this._selectedSchedule.JobPlace = inputValue;
     }
 
     private void AddNewBooking()

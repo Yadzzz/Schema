@@ -3,6 +3,7 @@
 @*@attribute [Authorize(Roles = "Administrator,User")]*@
 @inject IJSRuntime JS
 @inject Services.PageNavigationService PageNavService
+@inject Services.EmailService EmailService
 
 <PageTitle>Hem</PageTitle>
 
@@ -28,7 +29,7 @@
             <br />
 
             <div class="col-10" style="display: flex; justify-content: center; align-items: center;">
-            <img src="/vkblogo.png" alt="My Image" width="90" height="100">
+            <img src="/vkblogo.png" alt="My Image" width="90" height="100" @onclick="this.SendEmail" />
             </div>
 
             <br />
@@ -60,5 +61,10 @@
             await JS.InvokeVoidAsync("OnScrollEvent");
             this.StateHasChanged();
         }
+    }
+
+    private async Task SendEmail()
+    {
+        //await this.EmailService.SendEmail("yadmarzan@gmail.com", "Det har skett en ändring i din bokning");
     }
 }

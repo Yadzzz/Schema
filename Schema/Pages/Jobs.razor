@@ -1,0 +1,230 @@
+﻿@page "/jobs"
+
+@inject IJSRuntime JS
+@inject Services.PageNavigationService PageNavService
+@inject Services.JobsService JobsService
+@inject Services.NotificationService NotificationService
+
+<AuthorizeView Roles="Administrator" Context="usersPageContext">
+    <Authorized>
+        <div class="row layout-top-spacing">
+
+            <div class="row layout-top-spacing" />
+
+            @if (this.isLoading)
+            {
+                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <center><div class="spinner-border spinner-border-reverse align-self-center loader-lg text-secondary">Loading...</div></center>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>Arbetsplats</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-content widget-content-area">
+
+                            <div class="form-group mb-4">
+                                <label for="exampleFormControlSelect1">Arbetsplats</label>
+                                <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeJob>
+                                    <option value="0">Välj Arbetsplats</option>
+                                    @if (this._jobs != null && this._jobs.Count > 0)
+                                    {
+                                        foreach (var job in this._jobs.OrderBy(x => x.Name))
+                                        {
+                                            <option value="@job.Id">@job.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="d-grid gap-2 col-12 mx-auto">
+                                    <button class="btn btn-dark mb-4" @onclick="this.AddNewUser">Lägg till ny Arbetsplats</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row layout-top-spacing" />
+
+                @if (this._selectedJob != null)
+                {
+                    <div id="flAutoSizing" class="col-lg-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <center><h4>@this._selectedJob.Name</h4></center>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area">
+                                <div class="row g-3">
+                                    <div class="col-sm-12">
+                                        <label for="usernameInput">Arbetsplats</label>
+                                        <input id="usernameInput" type="text" class="form-control" aria-label="Användarnamn" @bind-value="this._selectedJob.Name" @bind-value:event="oninput">
+                                    </div>
+                                </div>
+
+                                <br /><br />
+
+                                <div class="col-sm-12">
+                                    <div class="d-grid gap-2 col-12 mx-auto">
+                                        <button class="btn btn-dark mb-4" @onclick="this.Save">Spara</button>
+                                        @if (this._selectedJob != null && this._selectedJob.Id != 0)
+                                        {
+                                            <button class="btn btn-dark mb-4" @onclick="this.Delete">Radera</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You cannot view this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private bool isLoading = true;
+    private List<DataAccessLibrary.Models.Job>? _jobs;
+    private DataAccessLibrary.Models.Job? _selectedJob;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this.PageNavService.UpdateActivePage("Jobs");
+
+            //var authState = await this._authenticationState;
+
+            this._jobs = await this.JobsService.GetJobsAsync();
+            await JS.InvokeVoidAsync("OnScrollEvent");
+            this.isLoading = false;
+            this.StateHasChanged();
+        }
+    }
+
+    public async Task Save()
+    {
+        if (this._selectedJob == null)
+        {
+            await this.NotificationService.AlertError("Error #3423434, kontakta server admin!");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(this._selectedJob.Name))
+        {
+            await this.NotificationService.AlertError("Vänligen fyll i alla fält!");
+            return;
+        }
+
+        if (this._selectedJob.Id == 0)
+        {
+            bool success = await this.JobsService.AddJob(this._selectedJob!);
+
+            //Notify User && Update the Users list
+            if (success)
+            {
+                this._jobs = await this.JobsService.GetJobsAsync();
+                this._selectedJob = null;
+
+                await this.NotificationService.AlertSuccess("Arbetsplats Tillagd!");
+            }
+            else
+            {
+                await this.NotificationService.AlertError("Kunde inte lägga till arbetsplats!");
+            }
+        }
+        else
+        {
+            bool success = await this.JobsService.UpdateJob(this._selectedJob!);
+
+            //Notify User
+            if (success)
+            {
+                this._jobs = await this.JobsService.GetJobsAsync();
+                this._selectedJob = null;
+
+                await this.NotificationService.AlertSuccess("Arbetsplats Uppdaterad!");
+            }
+            else
+            {
+                await this.NotificationService.AlertError("Kunde inte redigera arbetsplats!");
+            }
+        }
+    }
+
+    private async Task Delete()
+    {
+        if (this._selectedJob == null)
+        {
+            await this.NotificationService.AlertError("Error #949493, kontakta server admin!");
+            return;
+        }
+
+        bool success = await this.JobsService.RemoveJob(this._selectedJob);
+
+        if (success)
+        {
+            await this.FlushUsers();
+            this._selectedJob = null;
+            await this.NotificationService.AlertSuccess("Arbetsplats Raderad!");
+        }
+        else
+        {
+            await this.NotificationService.AlertError("Kunde inte radera användare!");
+        }
+
+        this.StateHasChanged();
+    }
+
+    private async Task FlushUsers()
+    {
+        this._jobs = await this.JobsService.GetJobsAsync();
+        this.StateHasChanged();
+    }
+
+    private void OnSelectJob(int id)
+    {
+        var job = this._jobs.Where(x => x.Id == id).FirstOrDefault();
+        this._selectedJob = job;
+        this.StateHasChanged();
+    }
+
+    private void OnChangeJob(ChangeEventArgs e)
+    {
+        string inputValue = e?.Value?.ToString();
+        if (int.TryParse(inputValue, out int id))
+        {
+            this.OnSelectJob(id);
+        }
+    }
+
+    private void AddNewUser()
+    {
+        this._selectedJob = new()
+            {
+                Id = 0,
+                Name = ""
+            };
+
+        this.StateHasChanged();
+    }
+}
