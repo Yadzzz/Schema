@@ -12,7 +12,7 @@
             return new Calendar(dates[0], dates[6], rows);
         }
 
-        public Calendar InitializeCalendarData(DateTime date, List<CalendarFilterOptions> calendarFilters)
+        public Calendar InitializeCalendarData(DateTime date, List<DataAccessLibrary.Models.ScheduleFilter> calendarFilters)
         {
             DateManipulator dateManipulator = new(date);
             DateTime[] dates = dateManipulator.GetDatesOfweek();
@@ -22,7 +22,7 @@
             return new Calendar(dates[0], dates[6], rows);
         }
 
-        private List<CalendarRow> GetCalendarRows(DateTime[] dates, List<CalendarFilterOptions> calendarFilters = null)
+        private List<CalendarRow> GetCalendarRows(DateTime[] dates, List<DataAccessLibrary.Models.ScheduleFilter> calendarFilters = null)
         {
             List<CalendarRow> rows = new List<CalendarRow>();
 
@@ -202,7 +202,7 @@
 
                     List<DataAccessLibrary.Models.Schedule> scheduledDateForUser = null;
 
-                    if (calendarFilters == null)
+                    if (calendarFilters == null || calendarFilters.Count == 0)
                     {
                         scheduledDateForUser = context.Schedules.Where(x => x.UserId == user.Id && x.DateStart.Value.Date == date.Date).ToList();
                     }

@@ -20,4 +20,6 @@ public partial class User
     public bool Active { get; set; }
 
     public string? ForordnandeDate { get; set; }
+
+    public string? Email { get; set; }
 }

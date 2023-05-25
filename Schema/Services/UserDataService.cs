@@ -12,16 +12,19 @@ namespace Schema.Services
         public string? Username { get; set; }
         private DataAccessLibrary.Models.User? user;
         private List<DataAccessLibrary.Models.Schedule>? bookings;
+        private List<DataAccessLibrary.Models.ScheduleFilter>? scheduleFilter;
 
         private UsersService usersService;
         private BookingsService bookingsService;
+        private ScheduleFiltersService scheduleFiltersService;
 
         private AuthenticationStateProvider authStateProvider;
 
-        public UserDataService(UsersService _usersService, BookingsService _bookingsService, AuthenticationStateProvider auth)
+        public UserDataService(UsersService _usersService, BookingsService _bookingsService, ScheduleFiltersService _scheduleFiltersService, AuthenticationStateProvider auth)
         {
             this.usersService = _usersService;
             this.bookingsService = _bookingsService;
+            this.scheduleFiltersService = _scheduleFiltersService;
             this.authStateProvider = auth;
 
             var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => builder.AddSerilog());
@@ -60,6 +63,7 @@ namespace Schema.Services
             if (this.user != null)
             {
                 this.bookings = await this.bookingsService.GetBookingsForUser(this.user.Id);
+                this.scheduleFilter = await this.scheduleFiltersService.GetFiltersForUserAsync(this.user.Id);
             }
         }
 
@@ -79,6 +83,17 @@ namespace Schema.Services
             }
         }
 
+        public List<DataAccessLibrary.Models.ScheduleFilter>? Filters
+        {
+            get
+            {
+                return this.Filters;
+            }
+            set
+            {
+                this.Filters = value;
+            }
+        }
 
         public async Task LoadData()
         {

@@ -7,19 +7,22 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject Services.BookingRequestsService BookingRequestsService
 @*@inject Services.UserDataService UserDataService*@
+@inject Services.JobsService JobsService
+@inject Services.UserDataService UserDataService
+@inject Services.ScheduleFiltersService FiltersService
 
 <div class="row layout-top-spacing">
 
     @*<div class="table-responsive">
-        <div class="col-xl-12" style="float:left">
-        <div class="col-sm-12">
-        <div class="custom-control custom-checkbox checkbox-info">
-        <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
-        <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
-        </div>
-        </div>
-        </div>
-        </div>*@
+    <div class="col-xl-12" style="float:left">
+    <div class="col-sm-12">
+    <div class="custom-control custom-checkbox checkbox-info">
+    <input type="checkbox" class="custom-control-input" id="showNI" checked="false" @onclick=@OnSchemeTypeClick>
+    <label class="custom-control-label" for="showNI">Classic Scheme Table</label>
+    </div>
+    </div>
+    </div>
+    </div>*@
 
     <div class="row layout-top-spacing" />
 
@@ -84,21 +87,42 @@
                                 </select>
                             </div>
 
+                            @*<div class="col-sm-3">
+                    <label for="exampleFormControlSelect1">Arbetsplats</label>
+                    <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeJobPlace>
+                    <option value="">Välj Arbetsplats</option>
+                    <option value="Push">Push</option>
+                    <option value="Köket">Köket</option>
+                    <option value="Storköket">Storköket</option>
+                    <option value="Bardot">Bardot</option>
+                    </select>
+                    </div>*@
+
                             <div class="col-sm-3">
-                                <label for="exampleFormControlSelect1">Arbetsplats</label>
-                                <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeJobPlace>
-                                    <option value="">Välj Arbetsplats</option>
-                                    <option value="Push">Push</option>
-                                    <option value="Köket">Köket</option>
-                                    <option value="Storköket">Storköket</option>
-                                    <option value="Bardot">Bardot</option>
+                                <label for="exampleFormControlSelect11">Jobtyp</label>
+                                <select class="form-select" id="exampleFormControlSelect11" @onchange="this.OnChangeJobPlace">
+                                    <option value="">Arbetsplats</option>
+                                    @if (this._jobPlaces != null && this._jobPlaces.Count > 0)
+                                    {
+                                        foreach (var job in this._jobPlaces)
+                                        {
+                                            if (this.jobPlaceInput.ToLower() == job.Name.ToLower())
+                                            {
+                                                <option value="@job.Name" selected>@job.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@job.Name">@job.Name</option>
+                                            }
+                                        }
+                                    }
                                 </select>
                             </div>
 
                             @*<div class="col-sm-3">
-                                    <label for="firstNameInput">Arbetsplats</label>
-                                    <input id="firstNameInput" type="text" class="form-control" placeholder="Arbetsplats" aria-label="Namn" @bind-value="this.jobPlaceInput" @bind-value:event="oninput">
-                                </div>*@
+                    <label for="firstNameInput">Arbetsplats</label>
+                    <input id="firstNameInput" type="text" class="form-control" placeholder="Arbetsplats" aria-label="Namn" @bind-value="this.jobPlaceInput" @bind-value:event="oninput">
+                    </div>*@
 
                             <div class="col-sm-3">
                                 <label for="firstNameInput">Lägg till Filter</label>
@@ -115,11 +139,11 @@
                             </div>
 
                             @*<div class="col-sm-3">
-                                    <label for="firstNameInput">Rensa Filter</label>
-                                    <div class="d-grid gap-2 col-12 mx-auto">
-                                        <button class="btn btn-dark mb-4" @onclick=this.ClearFilters>Rensa</button>
-                                    </div>
-                                </div>*@
+                    <label for="firstNameInput">Rensa Filter</label>
+                    <div class="d-grid gap-2 col-12 mx-auto">
+                    <button class="btn btn-dark mb-4" @onclick=this.ClearFilters>Rensa</button>
+                    </div>
+                    </div>*@
                         </div>
 
                     </div>
@@ -189,15 +213,15 @@
                 </thead>
                 <tbody>
                     @*<tr>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
-                        </tr>*@
+            <td><div style="max-width:100%; white-space:pre-line; font-size:7px;">Yad Mohamad</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            <td><div style="max-width:100%; white-space:pre-line; font-size:8px;">21:45-04:00</div></td>
+            </tr>*@
                     @if (this._calendar != null && this._calendar.Rows.Count > 0)
                     {
                         foreach (var row in this._calendar.Rows.Where(x => !string.IsNullOrEmpty(x.Monday) || !string.IsNullOrEmpty(x.Tuesday) || !string.IsNullOrEmpty(x.Wednesday) ||
@@ -346,13 +370,13 @@
 @if (DialogIsOpen)
 {
     <DialogModal Caption=@caption
-                 Message="@message"
-                 OnClose="@OnDialogClose"
-                 Type="DialogModal.Category.Okay"
-                 TakesInput="false"
-                 Bookings="this._selectedBookings"
-                 isAdmin="this.isAdmin"
-                 @ref="dialogRef">
+             Message="@message"
+             OnClose="@OnDialogClose"
+             Type="DialogModal.Category.Okay"
+             TakesInput="false"
+             Bookings="this._selectedBookings"
+             isAdmin="this.isAdmin"
+             @ref="dialogRef">
     </DialogModal>
 }
 
@@ -375,7 +399,9 @@
     private string jobTypeInput = "";
     private string jobPlaceInput = "";
 
-    private List<Calendar.CalendarFilterOptions>? CalendarFilterOptions;
+    private List<DataAccessLibrary.Models.ScheduleFilter>? CalendarFilterOptions;
+
+    private List<DataAccessLibrary.Models.Job>? _jobPlaces;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -405,12 +431,29 @@
                 "Annat"
             };
 
-            //await this.UserDataService.LoadData();
+            this._jobPlaces = await this.JobsService.GetJobsAsync();
+
+            await this.UserDataService.LoadData();
+            await LoadFilters();
 
             await JS.InvokeVoidAsync("OnScrollEvent");
-            this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
+            this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now, this.CalendarFilterOptions);
             this.isLoading = false;
             this.StateHasChanged();
+        }
+    }
+
+    private async Task LoadFilters()
+    {
+        if (this.UserDataService == null || this.UserDataService.User == null) return;
+
+        var filters = await this.FiltersService.GetFiltersForUserAsync(this.UserDataService.User.Id);
+
+        this.CalendarFilterOptions = new List<DataAccessLibrary.Models.ScheduleFilter>();
+
+        if (filters != null && filters.Count > 0)
+        {
+            this.CalendarFilterOptions = filters;
         }
     }
 
@@ -426,14 +469,17 @@
         this.jobPlaceInput = inputValue;
     }
 
-    private void DeleteFilter(Calendar.CalendarFilterOptions options)
+    private async Task DeleteFilter(DataAccessLibrary.Models.ScheduleFilter options)
     {
         if (this.CalendarFilterOptions == null || !this.CalendarFilterOptions.Contains(options))
         {
             return;
         }
 
-        this.CalendarFilterOptions.Remove(options);
+        if(await this.FiltersService.RemoveFilterAsync(options))
+        {
+            await this.LoadFilters();
+        }
     }
 
     private void ShowFilterTrigger()
@@ -458,16 +504,31 @@
 
         if (this.CalendarFilterOptions == null)
         {
-            this.CalendarFilterOptions = new List<Calendar.CalendarFilterOptions>();
+            this.CalendarFilterOptions = new List<DataAccessLibrary.Models.ScheduleFilter>();
         }
 
-        Calendar.CalendarFilterOptions options = new Calendar.CalendarFilterOptions()
-        {
-            JobPlace = this.jobPlaceInput,
-            JobType = this.jobTypeInput
-        };
+        //Calendar.CalendarFilterOptions filterOptions = new Calendar.CalendarFilterOptions()
+        //    {
+        //        JobPlace = this.jobPlaceInput,
+        //        JobType = this.jobTypeInput
+        //    };
 
-        this.CalendarFilterOptions.Add(options);
+        //if(this.CalendarFilterOptions.Where(x => x.JobPlace == filterOptions.JobPlace && x.JobType == filterOptions.JobType).ToList().Count > 0)
+        //{
+        //    return;
+        //}
+
+        var filter = new DataAccessLibrary.Models.ScheduleFilter()
+            {
+                UserId = this.UserDataService.User.Id,
+                JobPlace = this.jobPlaceInput,
+                JobType = this.jobTypeInput
+            };
+
+        if (await this.FiltersService.AddFilter(filter))
+        {
+            await this.LoadFilters();
+        }
     }
 
     private async Task ApplyFilters()
@@ -482,10 +543,19 @@
         this.StateHasChanged();
     }
 
-    private void ClearFilters()
+    private async Task ClearFilters()
     {
         this.isLoading = true;
-        this.CalendarFilterOptions?.Clear();
+
+        if(this.CalendarFilterOptions != null && this.CalendarFilterOptions.Count > 0)
+        {
+            foreach(var filterOption in this.CalendarFilterOptions)
+            {
+                bool deleted = await this.FiltersService.RemoveFilterAsync(filterOption);
+            }
+        }
+
+        await this.LoadFilters();
         this._calendar = this.CalendarService.InitializeCalendarData(DateTime.Now);
         this.isLoading = false;
         this.StateHasChanged();

@@ -87,6 +87,10 @@
                                         <input id="lastNameInput" type="text" class="form-control" placeholder="Efternamn" aria-label="Efternamn" @bind-value="this._selectedUser.LastName" @bind-value:event="oninput">
                                     </div>
                                     <div class="col-sm-6">
+                                        <label for="emailInput">Email</label>
+                                        <input id="emailInput" type="text" class="form-control" placeholder="Email" aria-label="Email" @bind-value="this._selectedUser.Email" @bind-value:event="oninput">
+                                    </div>
+                                    <div class="col-sm-6">
                                         <label for="forordnandateDateInput">Forördnande Utgång</label>
                                         <input id="forordnandateDateInput" type="text" class="form-control" placeholder="Forördnande" aria-label="Forördnande" @bind-value="this._selectedUser.ForordnandeDate" @bind-value:event="oninput">
                                     </div>
@@ -275,6 +279,7 @@
                 Password = "",
                 FirstName = "",
                 LastName = "",
+                Email = "",
                 Role = "User",
                 Active = true
             };
