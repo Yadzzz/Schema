@@ -4,6 +4,7 @@
 @inject Services.UserDataService UserDataService
 @inject Services.UsersService UsersService
 @inject NavigationManager NavManager
+@inject Services.EmailService EmailService
 
 <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
     <div class="modal-dialog">
@@ -186,6 +187,12 @@
     private async Task RequestBooking(int bookingId)
     {
         await this.BookingRequestsService.AddBookingRequest(this.UserDataService.User.Id, bookingId);
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Append($"Ny bokningsbegäran!\n\r");
+        await this.EmailService.SendEmail("yadmarzan@gmail.com", sb.ToString());
+        //await this.EmailService.SendEmail("yadmarzan@gmail.com", sb.ToString());
+
         this.StateHasChanged();
     }
 

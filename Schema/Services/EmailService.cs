@@ -7,16 +7,24 @@ namespace Schema.Services
     {
         public async Task SendEmail(string email, string text)
         {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            await Console.Out.WriteLineAsync(email);
+            await Console.Out.WriteLineAsync(text);
+
             try
             {
-                // SMTP settings
+                //SMTP settings
                 string smtpServer = "send.one.com";
                 int smtpPort = 587; // The port number may vary depending on your email provider
-                string smtpUsername = "no-reply@vastkustbevakning.se";
-                string smtpPassword = "vast123vast";
+                string smtpUsername = "no-reply@allticonsulting.se";
+                string smtpPassword = "yadshad12";
 
                 // Email information
-                string fromAddress = "no-reply@vastkustbevakning.se";
+                string fromAddress = "no-reply@allticonsulting.se";
                 string toAddress = email;
                 string subject = "Västkustbevakning";
                 string body = text;

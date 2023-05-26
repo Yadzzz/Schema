@@ -7,6 +7,7 @@
 @inject Services.BookingsService BookingsService
 @inject Services.NotificationService NotificationService
 @inject Services.JobsService JobsService
+@inject Services.EmailService EmailService
 
 <AuthorizeView Roles="Administrator" Context="usersPageContext">
     <Authorized>
@@ -314,6 +315,8 @@
             return;
         }
 
+        this.isLoading = true;
+
         var startTimeSpan = DateTime.ParseExact(this._selectedSchedule.TimeStart, "HH:mm", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
         var endTimeSpan = DateTime.ParseExact(this._selectedSchedule.TimeEnd, "HH:mm", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
 
@@ -332,6 +335,14 @@
 
             if (success)
             {
+                var bookedUser = this.GetUser(this._selectedSchedule.UserId);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append($"Du fått en ny bokning:\n\r");
+                sb.Append($"Datum: {this._selectedSchedule.DateStart} - {this._selectedSchedule.DateEnd}\n\r");
+                sb.Append($"Arbetsplats: {this._selectedSchedule.JobPlace}\n\r");
+                sb.Append($"Arbetstyp: {this._selectedSchedule.JobType}\n\r");
+                await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
+
                 await this.FlushBookings();
                 await this.NotificationService.AlertSuccess("Bokning tillagd!");
             }
@@ -347,6 +358,14 @@
 
             if (success)
             {
+                var bookedUser = this.GetUser(this._selectedSchedule.UserId);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append($"Det har skett en ändring i din bokning:\n\r");
+                sb.Append($"Datum: {this._selectedSchedule.DateStart} - {this._selectedSchedule.DateEnd}\n\r");
+                sb.Append($"Arbetsplats: {this._selectedSchedule.JobPlace}\n\r");
+                sb.Append($"Arbetstyp: {this._selectedSchedule.JobType}\n\r");
+                await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
+
                 await this.FlushBookings();
                 await this.NotificationService.AlertSuccess("Bokning uppdaterad!");
             }
@@ -358,15 +377,25 @@
 
         this._selectedSchedule = null;
         await this.GetBookings();
+        this.isLoading = false;
         this.StateHasChanged();
     }
 
     private async Task Delete(DataAccessLibrary.Models.Schedule schedule)
     {
+        this.isLoading = true;
         bool success = await this.BookingsService.DeleteBooking(schedule);
 
         if (success)
         {
+            var bookedUser = this.GetUser(schedule.UserId);
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append($"Din bokning har blivit borttagen:\n\r");
+            sb.Append($"Datum: {schedule.DateStart} - {schedule.DateEnd}\n\r");
+            sb.Append($"Arbetsplats: {schedule.JobPlace}\n\r");
+            sb.Append($"Arbetstyp: {schedule.JobType}\n\r");
+            await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
+
             await this.FlushBookings();
             await this.NotificationService.AlertSuccess("Bokning raderad!");
         }
@@ -374,6 +403,8 @@
         {
             await this.NotificationService.AlertError("Error #KJS3K30F00, kontakta server admin!");
         }
+
+        this.isLoading = false;
     }
 
     private void Select(DataAccessLibrary.Models.Schedule schedule)

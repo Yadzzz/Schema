@@ -6,6 +6,7 @@
 @inject Services.BookingsService BookingsService
 @inject Services.NotificationService NotificationService
 @inject Services.BookingRequestsService BookingRequestService
+@inject Services.EmailService EmailService
 
 <AuthorizeView Roles="Administrator" Context="usersPageContext">
     <Authorized>
@@ -130,6 +131,11 @@
         this._bookingRequests?.Remove(request);
         this.StateHasChanged();
 
+        var bookedUser = this.GetUser(request.UserId);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Append($"Din bokningsbegäran har blivit accepterad!\n\r");
+        await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
+
         await this.NotificationService.AlertSuccess("Pass Tilldelad!");
     }
 
@@ -152,6 +158,11 @@
 
         this._bookingRequests?.Remove(request);
         this.StateHasChanged();
+
+        var bookedUser = this.GetUser(request.UserId);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Append($"Din bokningsbegäran har blivit nekad!\n\r");
+        await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
 
         await this.NotificationService.AlertSuccess("Pass Avböjd!");
     }

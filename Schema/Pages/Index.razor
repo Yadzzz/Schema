@@ -41,33 +41,37 @@
     </div>
 
     <div class="col-md-12">
-        @if (this.ExpireUsers != null && this.ExpireUsers.Count > 0)
-        {
-            <div class="alert alert-arrow-right alert-icon-right alert-light-danger mb-4"
-                 role="alert">
-                <svg> ... </svg>
-                <strong>Varning!</strong> Förordnande går ut snart för:
-                <br />
-                @foreach(var user in this.ExpireUsers)
+        <AuthorizeView Roles="Administrator" Context="sidebContext">
+            <Authorized>
+                @if (this.ExpireUsers != null && this.ExpireUsers.Count > 0)
                 {
-                    <p>@user</p>
+                    <div class="alert alert-arrow-right alert-icon-right alert-light-danger mb-4"
+                         role="alert">
+                        <svg> ... </svg>
+                        <strong>Varning!</strong> Förordnande går ut snart för:
+                        <br />
+                        @foreach (var user in this.ExpireUsers)
+                        {
+                            <p>@user</p>
+                        }
+                    </div>
                 }
-            </div>
-        }
 
-        @if (this.ExpiredUsers != null && this.ExpiredUsers.Count > 0)
-        {
-            <div class="alert alert-arrow-right alert-icon-right alert-light-danger mb-4"
-                 role="alert">
-                <svg> ... </svg>
-                <strong>Varning!</strong> Förordnande har gått ut för:
-                <br />
-                @foreach (var user in this.ExpiredUsers)
+                @if (this.ExpiredUsers != null && this.ExpiredUsers.Count > 0)
                 {
-                    <p>@user</p>
+                    <div class="alert alert-arrow-right alert-icon-right alert-light-danger mb-4"
+                         role="alert">
+                        <svg> ... </svg>
+                        <strong>Varning!</strong> Förordnande har gått ut för:
+                        <br />
+                        @foreach (var user in this.ExpiredUsers)
+                        {
+                            <p>@user</p>
+                        }
+                    </div>
                 }
-            </div>
-        }
+            </Authorized>
+        </AuthorizeView>
     </div>
 
 </div>
