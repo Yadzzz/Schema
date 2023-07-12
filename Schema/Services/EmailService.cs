@@ -20,11 +20,11 @@ namespace Schema.Services
                 //SMTP settings
                 string smtpServer = "send.one.com";
                 int smtpPort = 587; // The port number may vary depending on your email provider
-                string smtpUsername = "no-reply@allticonsulting.se";
-                string smtpPassword = "yadshad12";
+                string smtpUsername = "no-reply@vastkustbevakning.se";
+                string smtpPassword = "vast123vast";
 
                 // Email information
-                string fromAddress = "no-reply@allticonsulting.se";
+                string fromAddress = "no-reply@vastkustbevakning.se";
                 string toAddress = email;
                 string subject = "Västkustbevakning";
                 string body = text;

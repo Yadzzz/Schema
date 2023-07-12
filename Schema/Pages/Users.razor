@@ -177,6 +177,16 @@
             return;
         }
 
+        if(DateTime.TryParse(this._selectedUser.ForordnandeDate, out DateTime result))
+        {
+            
+        }
+        else
+        {
+            await this.NotificationService.AlertError("Fel format i förordnande datum! Rätt format YYYY-MM-DD");
+            return;
+        }
+
         if (this._selectedUser.Id == 0)
         {
             bool success = await this.UsersService.AddUser(this._selectedUser!);
