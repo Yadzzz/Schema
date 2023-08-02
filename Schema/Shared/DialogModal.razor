@@ -190,8 +190,8 @@
 
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         sb.Append($"Ny bokningsbegäran!\n\r");
-        await this.EmailService.SendEmail("yadmarzan@gmail.com", sb.ToString());
-        //await this.EmailService.SendEmail("yadmarzan@gmail.com", sb.ToString());
+        await this.EmailService.SendEmail("ilyad.mosadegh@hotmail.com", sb.ToString());
+        await this.EmailService.SendEmail("rade@hotmail.com", sb.ToString());
 
         this.StateHasChanged();
     }
