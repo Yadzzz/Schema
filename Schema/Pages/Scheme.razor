@@ -519,11 +519,11 @@
         //}
 
         var filter = new DataAccessLibrary.Models.ScheduleFilter()
-            {
-                UserId = this.UserDataService.User.Id,
-                JobPlace = this.jobPlaceInput,
-                JobType = this.jobTypeInput
-            };
+        {
+            UserId = this.UserDataService.User.Id,
+            JobPlace = this.jobPlaceInput,
+            JobType = this.jobTypeInput
+        };
 
         if (await this.FiltersService.AddFilter(filter))
         {

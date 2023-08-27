@@ -190,8 +190,17 @@
 
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         sb.Append($"Ny bokningsbegäran!\n\r");
-        await this.EmailService.SendEmail("ilyad.mosadegh@hotmail.com", sb.ToString());
-        await this.EmailService.SendEmail("rade@hotmail.com", sb.ToString());
+        var booking = Bookings.Where(x => x.Id == bookingId).FirstOrDefault();
+        if (booking != null)
+        {
+            sb.Append("Bokning\n\r");
+            sb.Append($"Datum: {booking.DateStart} - {booking.DateEnd}\n\r");
+            sb.Append($"Arbetsplats: {booking.JobPlace}\n\r");
+            sb.Append($"Arbetstyp: {booking.JobType}\n\r");
+        }
+        //await this.EmailService.SendEmail("ilyad.mosadegh@hotmail.com", sb.ToString());
+        //await this.EmailService.SendEmail("rade@hotmail.com", sb.ToString());
+        await this.EmailService.SendBookingRequestEmail(sb.ToString());
 
         this.StateHasChanged();
     }
