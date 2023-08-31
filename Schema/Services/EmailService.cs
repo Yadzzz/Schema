@@ -64,7 +64,7 @@ namespace Schema.Services
 
                 // Email information
                 string fromAddress = "no-reply@vastkustbevakning.se";
-                string toAddress = "planering@vastkustbevakning.se";
+                string toAddress = "info@vastkustbevakning.se";
                 string subject = "Bokningsförfrågan";
                 string body = text;
 
