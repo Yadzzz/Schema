@@ -5,6 +5,7 @@
 @inject Services.UsersService UsersService
 @inject NavigationManager NavManager
 @inject Services.EmailService EmailService
+@inject Services.NotificationService NotificationService
 
 <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
     <div class="modal-dialog">
@@ -38,7 +39,7 @@
                     {
                         @foreach (var booking in this.Bookings)
                         {
-                            <b>Start: </b> @(booking?.DateStart.Value.ToString("yyyy-MM-dd") + " " + booking?.TimeStart)  <br />
+                            <b>Start: </b> @(booking?.DateStart.Value.ToString("yyyy-MM-dd") + " " + booking?.TimeStart) <br />
                             <b>Avslut: </b> @(booking?.DateEnd.Value.ToString("yyyy-MM-dd") + " " + booking?.TimeEnd) <br />
                             <b>Antal Timmar: </b> @(this.GetTotalHours(booking)) <br />
                             <b>Typ: </b> @booking.JobType <br />
@@ -58,6 +59,9 @@
                                 <br />
 
                                 <a class='btn btn-primary' style='height:35px; width:100%;' @onclick="() => this.OnEdit(booking.Id)">Redigera</a>
+                                <br />
+                                <br />
+                                <a class='btn btn-primary' style='height:35px; width:100%;' @onclick="() => this.OnDelete(booking)">Radera</a>
                                 <hr />
                             }
                             <br />
@@ -73,27 +77,27 @@
                 {
                     case Category.Okay:
                         <button type="button" class="btn btn-primary"
-                        @onclick=@Ok>
+                                @onclick=@Ok>
                             OK
                         </button>
                         break;
                     case Category.SaveNot:
                         <button type="button" class="btn btn-primary"
-                        @onclick=@Ok>
+                                @onclick=@Ok>
                             Spara
                         </button>
                         <button type="button" class="btn btn-danger"
-                        @onclick="@Cancel">
+                                @onclick="@Cancel">
                             Spara Inte
                         </button>
                         break;
                     case Category.DeleteNot:
                         <button type="button" class="btn btn-danger"
-                        @onclick=@Ok>
+                                @onclick=@Ok>
                             Radera
                         </button>
                         <button type="button" class="btn btn-warning"
-                        @onclick="@Cancel">
+                                @onclick="@Cancel">
                             Radera Inte
                         </button>
                         break;
@@ -152,6 +156,41 @@
     private void OnEdit(int bookingId)
     {
         this.NavManager.NavigateTo("/bookings/" + bookingId);
+    }
+
+    private async Task OnDelete(DataAccessLibrary.Models.Schedule schedule)
+    {
+        this.isLoading = true;
+        bool success = await this.BookingService.DeleteBooking(schedule);
+
+        if (success)
+        {
+            var bookedUser = this.GetUser(schedule.UserId);
+
+            if(bookedUser.FirstName.ToLower() != "ledigt-pass")
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append($"Din bokning har blivit borttagen:\n\r");
+                sb.Append($"Datum: {schedule.DateStart} - {schedule.DateEnd}\n\r");
+                sb.Append($"Arbetsplats: {schedule.JobPlace}\n\r");
+                sb.Append($"Arbetstyp: {schedule.JobType}\n\r");
+                await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
+            }
+
+            this.StateHasChanged();
+            await this.NotificationService.AlertSuccess("Bokning raderad!");
+        }
+        else
+        {
+            await this.NotificationService.AlertError("Error #KJS3K30F00, kontakta server admin!");
+        }
+
+        this.isLoading = false;
+    }
+
+    private DataAccessLibrary.Models.User? GetUser(int id)
+    {
+        return this.UsersService.GetUser(id);
     }
 
     private double GetTotalHours(DataAccessLibrary.Models.Schedule booking)

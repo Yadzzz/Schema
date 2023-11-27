@@ -139,9 +139,9 @@
                                         <label for="exampleFormControlSelect1">Användare</label>
                                         <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
                                             <option value="0">Välj Användare</option>
-                                            @if (this._users != null && this._users.Count > 0)
+                                            @if (this._sortedUsers != null && this._sortedUsers.Count > 0)
                                             {
-                                                foreach (var user in this._users)
+                                                foreach (var user in this._sortedUsers)
                                                 {
                                                     if (this._selectedSchedule.UserId == user.Id)
                                                     {
@@ -252,6 +252,7 @@
     [Parameter] public int BookingId { get; set; }
     private bool isLoading = true;
     private List<DataAccessLibrary.Models.User>? _users;
+    private List<DataAccessLibrary.Models.User>? _sortedUsers;
     private DataAccessLibrary.Models.Schedule? _selectedSchedule;
     private List<DataAccessLibrary.Models.Schedule>? _bookings;
     private bool _showLatestBookings = false;
@@ -266,6 +267,7 @@
             this.PageNavService.UpdateActivePage("Bookings");
 
             this._users = await this.UsersService.GetUsers();
+            this._sortedUsers = this._users?.OrderBy(x => x.FirstName).ToList();
             this._bookings = await this.BookingsService.GetBookings();
             this.jobTypes = new()
             {

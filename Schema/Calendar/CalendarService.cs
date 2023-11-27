@@ -275,7 +275,7 @@
                                 break;
                             case DayOfWeek.Sunday:
                                 sunday += schedule?.TimeStart + "-" + schedule?.TimeEnd;
-                                if (scheduledDateForUser.Count > 1 && irriation % 2 == 01)
+                                if (scheduledDateForUser.Count > 1 && irriation % 2 == 0)
                                 {
                                     sunday += "<br /><br />";
                                 }
