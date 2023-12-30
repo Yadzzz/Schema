@@ -348,12 +348,17 @@
 
         if (this._selectedSchedule.Id == 0)
         {
-            if (this._addNewBooking && this._selectedSchedule.Id == 0 && this._selectedSchedule.UserId != 0 && this.GetUsername(this._selectedSchedule.UserId).ToLower() == "ledigt-pass")
+            if (this.GetUsername(this._selectedSchedule.UserId).ToLower() == "ledigt-pass")
             {
                 //Add multiple (ledigt-pass)
-                if (this._amountOfBookings == 0)
+                if (this._amountOfBookings <= 0)
                 {
                     await this.NotificationService.AlertError("Antal pass måste vara större än 0!");
+                    return;
+                }
+                else if(this._amountOfBookings > 10)
+                {
+                    await this.NotificationService.AlertError("Antal pass får inte vara större än 10!");
                     return;
                 }
                 else
