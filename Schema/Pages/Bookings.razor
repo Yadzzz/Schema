@@ -38,18 +38,18 @@
                         <div class="widget-content widget-content-area">
 
                             @*<div class="form-group mb-4">
-                        <label for="exampleFormControlSelect1">Användare</label>
-                        <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
-                        <option value="0">Välj Användare</option>
-                        @if (this._users != null && this._users.Count > 0)
-                        {
-                        foreach (var user in this._users)
-                        {
-                        <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
-                        }
-                        }
-                        </select>
-                        </div>*@
+                                <label for="exampleFormControlSelect1">Användare</label>
+                                <select class="form-select" id="exampleFormControlSelect1" @onchange=@OnChangeUser>
+                                <option value="0">Välj Användare</option>
+                                @if (this._users != null && this._users.Count > 0)
+                                {
+                                foreach (var user in this._users)
+                                {
+                                <option value="@user.Id">@(user.FirstName + " " + user.LastName)</option>
+                                }
+                                }
+                                </select>
+                                </div>*@
 
                             <div class="col-sm-12">
                                 <div class="d-grid gap-2 col-12 mx-auto">
@@ -101,8 +101,8 @@
                                                     <td class="text-center">
                                                         <div class="action-btns">
                                                             @*<a href="javascript:void(0);" class="action-btn btn-view bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="View">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                                </a>*@
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                                </a>*@
                                                             <a href="javascript:void(0);" @onclick=@(() => this.Select(booking)) class="action-btn btn-edit bs-tooltip me-2" data-toggle="tooltip" data-placement="top" title="Edit">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                                             </a>
@@ -200,19 +200,19 @@
                                                 }
                                             }
                                             @*else
-                                    {
-                                    <option value="0">Jobbtyp</option>
-                                    <option value="Entrevärd">Entrevärd</option>
-                                    <option value="Ordningsvakt">Ordningsvakt</option>
-                                    <option value="Vaktchef">Vaktchef</option>
-                                    <option value="Annat">Annat</option>
-                                    }*@
+                                                {
+                                                <option value="0">Jobbtyp</option>
+                                                <option value="Entrevärd">Entrevärd</option>
+                                                <option value="Ordningsvakt">Ordningsvakt</option>
+                                                <option value="Vaktchef">Vaktchef</option>
+                                                <option value="Annat">Annat</option>
+                                                }*@
                                         </select>
                                     </div>
                                     @*<div class="col-sm-6">
-                            <label for="arbetsplatsInput">Arbetsplats</label>
-                            <input id="arbetsplatsInput" type="text" class="form-control" placeholder="e.g Push" @bind-value="this._selectedSchedule.JobPlace" @bind-value:event="oninput">
-                            </div>*@
+                                        <label for="arbetsplatsInput">Arbetsplats</label>
+                                        <input id="arbetsplatsInput" type="text" class="form-control" placeholder="e.g Push" @bind-value="this._selectedSchedule.JobPlace" @bind-value:event="oninput">
+                                        </div>*@
                                     <div class="form-group mb-4">
                                         <label for="exampleFormControlSelect1">Jobtyp</label>
                                         <select class="form-select" id="exampleFormControlSelect1" @onchange="this.OnChangeJobPlace">
@@ -237,10 +237,10 @@
                                         <label for="commentInput">Kommentar</label>
                                         <input id="commentInput" type="text" class="form-control" placeholder="Kommentar" @bind-value="this._selectedSchedule.Comment" @bind-value:event="oninput">
                                     </div>
-                                    <div class="col-sm-6">
+                                    @*<div class="col-sm-6">
                                         <label for="amount">Antal Pass</label>
                                         <input id="amount" type="number" class="form-control" placeholder="Antal Pass" @bind-value="this._amountOfBookings" @bind-value:event="oninput">
-                                    </div>
+                                    </div>*@
                                 </div>
 
                                 <br /><br />
@@ -286,7 +286,7 @@
             this._sortedUsers = this._users?.OrderBy(x => x.FirstName).ToList();
             this._bookings = await this.BookingsService.GetBookings();
             this.jobTypes = new()
-            {
+        {
                 "Entrevärd",
                 "Ordningsvakt",
                 "Vaktchef",
@@ -356,7 +356,7 @@
                     await this.NotificationService.AlertError("Antal pass måste vara större än 0!");
                     return;
                 }
-                else if(this._amountOfBookings > 10)
+                else if (this._amountOfBookings > 10)
                 {
                     await this.NotificationService.AlertError("Antal pass får inte vara större än 10!");
                     return;
@@ -377,6 +377,9 @@
                             sb.Append($"Arbetsplats: {this._selectedSchedule.JobPlace}\n\r");
                             sb.Append($"Arbetstyp: {this._selectedSchedule.JobType}\n\r");
                             await this.EmailService.SendEmail(bookedUser?.Email, sb.ToString());
+
+                            await this.FlushBookings();
+                            await this.NotificationService.AlertSuccess("Bokning tillagd!");
                         }
                         else
                         {
@@ -508,9 +511,9 @@
     private void AddNewBooking()
     {
         this._selectedSchedule = new()
-            {
-                Id = 0
-            };
+        {
+            Id = 0
+        };
 
         this._showLatestBookings = false;
         this._addNewBooking = true;
